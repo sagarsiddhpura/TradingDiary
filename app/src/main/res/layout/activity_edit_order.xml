@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="false"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="64dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing_normal"
+                        android:layout_marginRight="@dimen/spacing_normal"
+                        android:focusable="true"
+                        android:hint="Order Name"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@color/white_lighter"
+                        app:counterTextAppearance="@style/CounterTextAppearance">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_title"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:maxLines="2"
+                            android:singleLine="false"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="20sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_normal"
+                        android:layout_marginEnd="@dimen/spacing_normal"
+                        android:hint="@string/quantity"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/qty_edit"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_quantity"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_normal"
+                        android:layout_marginEnd="@dimen/spacing_normal"
+                        android:layout_marginBottom="@dimen/spacing_big"
+                        android:hint="@string/price_per_unit"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/price_per_unit_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_price"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/edit_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:fitsSystemWindows="false"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_close" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@color/yellow_600"
+            app:rippleColor="@color/teal_700"
+            app:srcCompat="@drawable/ic_done" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

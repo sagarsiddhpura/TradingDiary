@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TradingDiary</string>
+    <string name="quantity">Quantity</string>
+    <string name="price_per_unit">Price per Unit</string>
+    <string name="yes">Yes</string>
+    <string name="ok">OK</string>
+    <string name="no">NO</string>
+    <string name="delete">Delete</string>
+</resources>
