@@ -2,6 +2,7 @@ package com.android.tradingdiary.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -38,7 +39,7 @@ public class Utils {
         return orders;
     }
 
-    public static void saveOrders(ArrayList<Order> orders) {
+    private static void saveOrders(ArrayList<Order> orders) {
         Paper.book().write("orders", orders);
     }
 
@@ -51,7 +52,7 @@ public class Utils {
         return orders;
     }
 
-    public static void saveCompletedOrders(ArrayList<Order> completedOrders) {
+    private static void saveCompletedOrders(ArrayList<Order> completedOrders) {
         Paper.book().write("completed_orders", completedOrders);
     }
 
