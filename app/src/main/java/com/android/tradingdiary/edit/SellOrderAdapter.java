@@ -48,7 +48,7 @@ public class SellOrderAdapter extends RecyclerView.Adapter<SellOrderAdapter.View
         }
     }
 
-    SellOrderAdapter(Context context) {
+    public SellOrderAdapter(Context context) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
     }

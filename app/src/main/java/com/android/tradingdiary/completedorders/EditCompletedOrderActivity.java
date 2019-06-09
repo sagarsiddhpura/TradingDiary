@@ -1,6 +1,7 @@
-package com.android.tradingdiary.edit;
+package com.android.tradingdiary.completedorders;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
@@ -10,13 +11,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.data.SellOrder;
+import com.android.tradingdiary.edit.SellOrderAdapter;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.mainscreen.ItemTouchHelperCallback;
 import com.android.tradingdiary.utils.Utils;
@@ -26,7 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class EditOrderJavaActivity extends AppCompatActivity {
+public class EditCompletedOrderActivity extends AppCompatActivity {
 
     private EditText name = null;
     private EditText buyQty;
@@ -38,7 +40,7 @@ public class EditOrderJavaActivity extends AppCompatActivity {
     private SellOrderAdapter adapter;
     private ArrayList<SellOrder> orders;
     private TextInputLayout estimatedProfitLossHint;
-    private EditText actualPriceTotal;
+    private EditText actualSaleTotal;
     private TextInputLayout actualProfitLossHint;
     private EditText actualProfitLoss;
 
@@ -61,14 +63,14 @@ public class EditOrderJavaActivity extends AppCompatActivity {
         sellingPriceTotal = findViewById(R.id.estimated_total_selling_price);
         estimatedProfitLoss = findViewById(R.id.estimated_profit_loss);
         estimatedProfitLossHint = findViewById(R.id.profit_loss_hint);
-        actualPriceTotal = findViewById(R.id.actual_total_selling_price);
+        actualSaleTotal = findViewById(R.id.actual_total_selling_price);
         actualProfitLoss = findViewById(R.id.actual_profit_loss);
         actualProfitLossHint = findViewById(R.id.actual_profit_loss_hint);
 
         if(isNew) {
             order = new Order(String.valueOf(System.currentTimeMillis()), "");
         } else {
-            order = Utils.getOrder(orderId);
+            order = Utils.getCompletedOrder(orderId);
             loadOrder(order);
         }
 
@@ -78,9 +80,9 @@ public class EditOrderJavaActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final AlertDialog.Builder alert = new AlertDialog.Builder(EditOrderJavaActivity.this, R.style.MyDialogTheme);
+                final AlertDialog.Builder alert = new AlertDialog.Builder(EditCompletedOrderActivity.this, R.style.MyDialogTheme);
                 alert.setTitle("Add Order");
-                LayoutInflater inflater = LayoutInflater.from(EditOrderJavaActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(EditCompletedOrderActivity.this);
                 final View dialogView = inflater.inflate(R.layout.dialog_add_sell_order, null);
 
                 final EditText sellPrice = dialogView.findViewById(R.id.sell_order_price_per_unit);
@@ -110,9 +112,9 @@ public class EditOrderJavaActivity extends AppCompatActivity {
                         dialog.dismiss();
                         refreshList(order.sellOrders);
                         setProfitLossData();
+                        actualSaleTotal.setText(String.valueOf(order.getActualSaleTotal()));
                     }
                 });
-
             }
         });
 
@@ -159,8 +161,8 @@ public class EditOrderJavaActivity extends AppCompatActivity {
             }
         });
 
-        setupEventList(order);
-        actualPriceTotal.setText(String.valueOf(order.getActualSaleTotal()));
+        setupSellOrdersList(order);
+        actualSaleTotal.setText(String.valueOf(order.getActualSaleTotal()));
     }
 
     private void loadOrder(final Order order) {
@@ -199,7 +201,7 @@ public class EditOrderJavaActivity extends AppCompatActivity {
         return Double.parseDouble(sellingPricePerUnit.getText().toString());
     }
 
-    private void setupEventList(Order order) {
+    private void setupSellOrdersList(final Order order) {
         RecyclerView recyclerView = findViewById(R.id.orders_rv);
         adapter = new SellOrderAdapter(this);
         recyclerView.setAdapter(adapter);
@@ -207,6 +209,9 @@ public class EditOrderJavaActivity extends AppCompatActivity {
         touchHelper.attachToRecyclerView(recyclerView);
         LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down);
         recyclerView.setLayoutAnimation(animationController);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         orders = order.sellOrders;
         if(orders == null) {
@@ -216,14 +221,15 @@ public class EditOrderJavaActivity extends AppCompatActivity {
 
         adapter.setItemActionListener(new ItemActionListener() {
             @Override
-            public void onItemSwiped(String eventId) {
-                deleteSellOrder(eventId);
+            public void onItemSwiped(String id) {
+                deleteSellOrder(id);
                 refreshList(orders);
                 setProfitLossData();
+                actualSaleTotal.setText(String.valueOf(order.getActualSaleTotal()));
             }
 
             @Override
-            public void onItemClicked(String eventId) {
+            public void onItemClicked(String id) {
             }
         });
     }
@@ -231,8 +237,8 @@ public class EditOrderJavaActivity extends AppCompatActivity {
     private void deleteSellOrder(String id) {
         Iterator<SellOrder> iterator = order.sellOrders.iterator();
         while (iterator.hasNext()) {
-            SellOrder event = iterator.next();
-            if(event.getId().equals(id)) {
+            SellOrder item = iterator.next();
+            if(item.getId().equals(id)) {
                 iterator.remove();
             }
         }
@@ -259,9 +265,13 @@ public class EditOrderJavaActivity extends AppCompatActivity {
         order.name = name.getText().toString();
         order.buyQty = Integer.parseInt(buyQty.getText().toString());
         order.buyPricePerUnit = Double.parseDouble(buyPrice.getText().toString());
-        order.sellPricePerUnit = Double.parseDouble(sellingPricePerUnit.getText().toString());
+        try {
+            order.sellPricePerUnit = Double.parseDouble(sellingPricePerUnit.getText().toString());
+        } catch (Exception e) {
+            order.sellPricePerUnit = 0.0;
+        }
 
-        Utils.saveOrder(order);
+        Utils.saveCompletedOrder(order);
         Toast.makeText(getApplicationContext(),"Order saved...", Toast.LENGTH_LONG).show();
         finish();
     }
@@ -282,7 +292,7 @@ public class EditOrderJavaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_del:
-                deleteSellOrder();
+                deleteOrder();
                 break;
             case R.id.action_done:
                 validateAndSaveEntity();
@@ -296,8 +306,8 @@ public class EditOrderJavaActivity extends AppCompatActivity {
         return true;
     }
 
-    private void deleteSellOrder() {
-        Utils.deleteEvent(order.id);
+    private void deleteOrder() {
+        Utils.deleteCompletedOrder(order.id);
         Toast.makeText(getApplicationContext(),"Order deleted...",Toast.LENGTH_LONG).show();
         finish();
     }

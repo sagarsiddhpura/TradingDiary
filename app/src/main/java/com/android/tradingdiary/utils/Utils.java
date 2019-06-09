@@ -3,6 +3,7 @@ package com.android.tradingdiary.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
-import com.android.tradingdiary.edit.EditOrderJavaActivity;
 import io.paperdb.Paper;
 import org.jetbrains.annotations.NotNull;
 
@@ -79,7 +79,7 @@ public class Utils {
         return null;
     }
 
-    public static void setupActionBar(EditOrderJavaActivity activity, boolean isLightBar, int bgColorRes,
+    public static void setupActionBar(Activity activity, boolean isLightBar, int bgColorRes,
                                       int bgColorRes2, int titleRes, Toolbar toolbar) {
         Window window = activity.getWindow();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -105,7 +105,7 @@ public class Utils {
         }
     }
 
-    public static void deleteEvent(String id) {
+    public static ArrayList<Order> deleteOrder(String id) {
         ArrayList<Order> orders = getOrders();
         Iterator<Order> iterator = orders.iterator();
         while(iterator.hasNext()) {
@@ -116,6 +116,7 @@ public class Utils {
             }
         }
         saveOrders(orders);
+        return orders;
     }
 
     public static void hideKeyBoard(Activity activity) {
@@ -125,12 +126,55 @@ public class Utils {
         }
     }
 
-    private void showAlert(String title, String message) {
-//        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//        alert.setTitle(title);
-//        alert.setMessage(message);
-//        alert.setPositiveButton("Ok", null);
-//        alert.show();
+    public static void saveCompletedOrder(Order order) {
+        if(order != null) {
+            ArrayList<Order> orders = getCompletedOrders();
+            Iterator<Order> iterator = orders.iterator();
+            while(iterator.hasNext()) {
+                Order currentOrder = iterator.next();
+                if(currentOrder != null && currentOrder.id.equals(order.id)) {
+                    iterator.remove();
+                    break;
+                }
+            }
+            orders.add(order);
+            saveCompletedOrders(orders);
+        }
+    }
+
+    public static void deleteCompletedOrder(String id) {
+        ArrayList<Order> orders = getCompletedOrders();
+        Iterator<Order> iterator = orders.iterator();
+        while(iterator.hasNext()) {
+            Order currentOrder = iterator.next();
+            if(currentOrder.id.equals(id)) {
+                iterator.remove();
+                break;
+            }
+        }
+        saveCompletedOrders(orders);
+    }
+
+    public static Order getCompletedOrder(String orderId) {
+        ArrayList<Order> orders = getCompletedOrders();
+        for (Order order : orders) {
+            if(order.id.equals(orderId)) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public static int getCount(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getInt("COUNT", 100);
+    }
+
+    public static void incrementCount(Context context) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putInt("COUNT", getCount(context)+1)
+                .apply();
     }
 
 }

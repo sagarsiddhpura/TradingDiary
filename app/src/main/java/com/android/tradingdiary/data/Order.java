@@ -1,6 +1,7 @@
 package com.android.tradingdiary.data;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Order {
     public String id;
@@ -9,6 +10,8 @@ public class Order {
     public int buyQty;
     public Double sellPricePerUnit;
     public ArrayList<SellOrder> sellOrders;
+    public long creationDate;
+    public long userId;
 
     public Order(String id, String name) {
         this.id = id;
@@ -17,6 +20,7 @@ public class Order {
         this.buyQty = 0;
         this.sellOrders = new ArrayList<>();
         sellPricePerUnit = 0.0;
+        creationDate = System.currentTimeMillis();
     }
 
     public Order() {
@@ -64,10 +68,17 @@ public class Order {
 
     private int getSoldQty() {
         int soldQty = 0;
-        for (SellOrder sellOrder : sellOrders) {
+        for (SellOrder sellOrder : getSellOrders()) {
             soldQty += sellOrder.sellQty;
         }
         return soldQty;
+    }
+
+    private ArrayList<SellOrder> getSellOrders() {
+        if(sellOrders == null) {
+            sellOrders = new ArrayList<>();
+        }
+        return sellOrders;
     }
 
     public int getRemainingSellQty() {
@@ -84,5 +95,9 @@ public class Order {
 
     public double getProfitLoss() {
         return getActualSaleTotal() - (buyQty * buyPricePerUnit);
+    }
+
+    public boolean isComplete() {
+        return buyQty - getSoldQty() < 1;
     }
 }

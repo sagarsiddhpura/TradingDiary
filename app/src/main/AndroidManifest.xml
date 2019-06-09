@@ -10,11 +10,15 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".edit.EditOrderJavaActivity">
+        <activity android:name=".completedorders.EditCompletedOrderActivity">
+        </activity>
+        <activity android:name=".completedorders.CompletedOrdersActivity">
         </activity>
         <activity android:name=".edit.EditOrderActivity">
         </activity>
-        <activity android:name=".mainscreen.MainActivity">
+        <activity android:name=".edit.EditOrderActivity">
+        </activity>
+        <activity android:name=".mainscreen.MainActivityJava">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

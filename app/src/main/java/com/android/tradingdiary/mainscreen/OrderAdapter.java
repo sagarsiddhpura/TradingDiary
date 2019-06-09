@@ -9,24 +9,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
+import com.android.tradingdiary.utils.DateTimeUtils;
 import com.google.android.material.card.MaterialCardView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> implements ItemTouchHelperListener {
 
     private ItemActionListener mEventItemActionListener;
     private final LayoutInflater mInflater;
-    private List<Order> items;
+    private ArrayList<Order> orders;
     private Context context;
 
     @Override
     public void onItemSwipeToStart(int position) {
-        mEventItemActionListener.onItemSwiped(items.get(position).getId());
+        mEventItemActionListener.onItemSwiped(orders.get(position).getId());
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        private final TextView mId;
+        private TextView mSub;
         private Order item;
         private TextView mTitle;
         private TextView mDesc;
@@ -38,15 +41,30 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             mCard = itemView.findViewById(R.id.event_card);
             mTitle = itemView.findViewById(R.id.event_title);
             mDesc = itemView.findViewById(R.id.event_desc);
+            mSub = itemView.findViewById(R.id.event_subtitle);
+            mId = itemView.findViewById(R.id.event_id);
         }
 
         private void bind(Order item_) {
             item = item_;
             mTitle.setText(item_.getName());
+            if(item_.getRemainingSellQty() == 0) {
+                mDesc.setText(item_.buyQty + " sold");
+                if(item_.getProfitLoss() > 0) {
+                    mSub.setText("Profit: " +  (item_.getProfitLoss()) + " Rs.");
+                } else {
+                    mSub.setText("Loss: " +  (item_.getProfitLoss() * -1) + " Rs.");
+                }
+            } else {
+                mDesc.setText(item_.getRemainingSellQty() + "/" + item_.buyQty + " left");
+                mSub.setText( (item_.getRemainingSellQty()*item_.sellPricePerUnit) + " Rs. sale remaining");
+            }
+            mId.setText("Order ID: " + item_.userId + ", Created: " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)
+                    + " " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.TIME));
         }
     }
 
-    OrderAdapter(Context context) {
+    public OrderAdapter(Context context) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -54,14 +72,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.item_event, parent, false);
+        View itemView = mInflater.inflate(R.layout.item_order, parent, false);
         return new ViewHolder(itemView, viewType);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        if (items != null) {
-            final Order current = items.get(position);
+        if (orders != null) {
+            final Order current = orders.get(position);
             holder.bind(current);
 
             if (mEventItemActionListener != null) {
@@ -77,15 +95,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        if (items != null) {
-            return items.size();
+        if (orders != null) {
+            return orders.size();
         } else {
             return 0;
         }
     }
 
-    public void setEntities(List<Order> events) {
-        items = events;
+    public void setEntities(ArrayList<Order> items_) {
+        orders = new ArrayList<>(items_);
         notifyDataSetChanged();
     }
 
