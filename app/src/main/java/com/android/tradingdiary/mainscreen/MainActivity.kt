@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.android.tradingdiary.R
 import com.android.tradingdiary.data.Order
-import com.android.tradingdiary.edit.EditOrderActivity
+import com.android.tradingdiary.edit.EditOrderJavaActivity
 import com.android.tradingdiary.utils.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -26,16 +26,16 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         Utils.setupSystemUI(this)
 
-        setupEventList()
+        setupList()
 
         fab_add.setOnClickListener {
-            val intent = Intent(this@MainActivity, EditOrderActivity::class.java)
+            val intent = Intent(this@MainActivity, EditOrderJavaActivity::class.java)
                 intent.putExtra("IS_NEW", true)
                 startActivity(intent)
         }
     }
 
-    private fun setupEventList() {
+    private fun setupList() {
         val recyclerView = findViewById<RecyclerView>(R.id.list_events)
         mOrderAdapter = OrderAdapter(this)
         recyclerView.adapter = mOrderAdapter
@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity() {
                 refreshList(orders!!)
             }
 
-            override fun onItemClicked(eventId: String) {
-//                val intent = Intent(this@MainActivity, EventDetailActivity::class.java)
-//                intent.putExtra("EVENT_ID", eventId)
-//                startActivity(intent)
+            override fun onItemClicked(entityId: String) {
+                val intent = Intent(this@MainActivity, EditOrderJavaActivity::class.java)
+                intent.putExtra("ORDER_ID", entityId)
+                startActivity(intent)
             }
         })
     }
@@ -92,5 +92,10 @@ class MainActivity : AppCompatActivity() {
     private fun showCompletedEvents() {
 //        val intent = Intent(this@MainActivity, CompletedEventsActivity::class.java)
 //        startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupList()
     }
 }

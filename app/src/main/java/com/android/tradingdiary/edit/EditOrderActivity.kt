@@ -46,6 +46,6 @@ class EditOrderActivity : AppCompatActivity() {
     private fun loadOrder(order: Order) {
         title_edit.setText(order.name)
         qty_edit.setText(order.buyQty)
-        price_per_unit_edit.setText(order.buyPrice.toString())
+        price_per_unit_edit.setText(order.buyPricePerUnit.toString())
     }
 }

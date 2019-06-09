@@ -51,7 +51,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     public int getSlideLimitation(RecyclerView.ViewHolder viewHolder) {
         ViewGroup viewGroup = (ViewGroup) viewHolder.itemView;
-        return viewGroup.getChildAt(2).getLayoutParams().width;
+        return viewGroup.getChildAt(1).getLayoutParams().width;
     }
 
     @Override

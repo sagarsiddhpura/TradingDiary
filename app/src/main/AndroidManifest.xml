@@ -10,6 +10,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".edit.EditOrderJavaActivity">
+        </activity>
         <activity android:name=".edit.EditOrderActivity">
         </activity>
         <activity android:name=".mainscreen.MainActivity">

@@ -3,11 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_done"
+        android:name="@string/done"
+        android:icon="@drawable/ic_done_white"
+        android:title="@string/done"
+        app:showAsAction="always"
+        android:visible="true"/>
+
+    <item
         android:id="@+id/action_del"
         android:name="@string/delete"
         android:icon="@drawable/ic_delete"
         android:title="@string/delete"
         app:showAsAction="always"
-        android:visible="false"/>
+        android:visible="true"/>
 
 </menu>
