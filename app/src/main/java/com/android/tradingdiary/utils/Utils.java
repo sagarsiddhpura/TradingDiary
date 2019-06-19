@@ -178,4 +178,11 @@ public class Utils {
                 .apply();
     }
 
+    public static String formatId(String id) {
+        if(id != null && id.length() > 12) {
+            id = id.substring(id.length() - 8, id.length() - 4) + "-" + id.substring(id.length() - 4);
+            return id;
+        }
+        return id;
+    }
 }

@@ -1,8 +1,10 @@
 package com.android.tradingdiary.completedorders;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +14,7 @@ import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.mainscreen.ItemTouchHelperCallback;
+import com.android.tradingdiary.mainscreen.MainActivity;
 import com.android.tradingdiary.mainscreen.OrderAdapter;
 import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,8 +45,6 @@ public class CompletedOrdersActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.list_orders);
         adapter = new OrderAdapter(this);
         recyclerView.setAdapter(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
-        touchHelper.attachToRecyclerView(recyclerView);
         LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down);
         recyclerView.setLayoutAnimation(animationController);
 
@@ -52,10 +53,20 @@ public class CompletedOrdersActivity extends AppCompatActivity {
 
         adapter.setItemActionListener(new ItemActionListener() {
             @Override
-            public void onItemSwiped(String id) {
-                Utils.deleteCompletedOrder(id);
-                orders = Utils.getCompletedOrders();
-                refreshList(orders);
+            public void onItemSwiped(final String id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CompletedOrdersActivity.this);
+                builder.setMessage("Are you sure you want to delete this Order?")
+                        .setTitle("Delete Order");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int itemId) {
+                        Utils.deleteCompletedOrder(id);
+                        orders = Utils.getCompletedOrders();
+                        refreshList(orders);
+                    }
+                });
+                builder.setNegativeButton("CANCEL",null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
 
             @Override

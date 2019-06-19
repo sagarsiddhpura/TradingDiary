@@ -1,5 +1,6 @@
 package com.android.tradingdiary.mainscreen;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,9 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.BuildConfig;
 import com.android.tradingdiary.R;
@@ -51,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if(BuildConfig.DEBUG) {
-            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
-            intent.putExtra("IS_NEW", true);
-            startActivity(intent);
+//            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
+//            intent.putExtra("IS_NEW", true);
+//            startActivity(intent);
         }
     }
 
@@ -61,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.list_orders);
         adapter = new OrderAdapter(this);
         recyclerView.setAdapter(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
-        touchHelper.attachToRecyclerView(recyclerView);
         LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down);
         recyclerView.setLayoutAnimation(animationController);
 
@@ -71,12 +70,21 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setItemActionListener(new ItemActionListener() {
             @Override
-            public void onItemSwiped(String id) {
-//                deleteOrder(id);
-                Order order = Utils.getOrder(id);
-                Utils.saveCompletedOrder(order);
-                orders = Utils.deleteOrder(id);
-                refreshList(orders);
+            public void onItemSwiped(final String id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Are you sure you want to delete this Order?")
+                        .setTitle("Delete Order");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int itemId) {
+                        Order order = Utils.getOrder(id);
+                        Utils.saveCompletedOrder(order);
+                        orders = Utils.deleteOrder(id);
+                        refreshList(orders);
+                    }
+                });
+                builder.setNegativeButton("CANCEL",null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
 
             @Override

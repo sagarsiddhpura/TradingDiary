@@ -74,8 +74,6 @@ public class EditOrderActivity extends AppCompatActivity {
 
         if(isNew) {
             order = new Order(String.valueOf(System.currentTimeMillis()), "");
-            order.userId = Utils.getCount(this);
-            Utils.incrementCount(this);
         } else {
             order = Utils.getOrder(orderId);
             loadOrder(order);

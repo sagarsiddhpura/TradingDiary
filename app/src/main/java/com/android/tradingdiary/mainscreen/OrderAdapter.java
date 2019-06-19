@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mId;
+        private final ImageView delete;
         private TextView mSub;
         private Order item;
         private TextView mTitle;
@@ -43,9 +45,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             mDesc = itemView.findViewById(R.id.event_desc);
             mSub = itemView.findViewById(R.id.event_subtitle);
             mId = itemView.findViewById(R.id.event_id);
+            delete = itemView.findViewById(R.id.delete);
         }
 
-        private void bind(Order item_) {
+        private void bind(final Order item_) {
             item = item_;
             mTitle.setText(item_.getName());
             if(item_.getRemainingSellQty() == 0) {
@@ -57,10 +60,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 }
             } else {
                 mDesc.setText(item_.getRemainingSellQty() + "/" + item_.buyQty + " left");
-                mSub.setText( (item_.getRemainingSellQty()*item_.sellPricePerUnit) + " Rs. sale remaining");
+                mSub.setText(item_.getRemainingSaleTotal() + " Rs. sale remaining");
             }
-            mId.setText("Order ID: " + item_.userId + ", Created: " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)
-                    + " " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.TIME));
+            mId.setText("Order ID: " + item_.userId + " (" + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)
+                    + " " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.TIME) + ")");
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mEventItemActionListener.onItemSwiped(item_.getId());
+                }
+            });
         }
     }
 

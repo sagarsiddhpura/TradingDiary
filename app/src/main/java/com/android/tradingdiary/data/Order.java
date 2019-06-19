@@ -1,5 +1,7 @@
 package com.android.tradingdiary.data;
 
+import com.android.tradingdiary.utils.Utils;
+
 import java.util.ArrayList;
 
 public class Order {
@@ -10,7 +12,7 @@ public class Order {
     public Double sellPricePerUnit;
     public ArrayList<SellOrder> sellOrders;
     public long creationDate;
-    public long userId;
+    public String userId;
     public String unit;
     public double sellPercentage;
 
@@ -22,8 +24,9 @@ public class Order {
         this.sellOrders = new ArrayList<>();
         this.sellPricePerUnit = 0.0;
         this.sellPercentage = 0.0;
-        creationDate = System.currentTimeMillis();
-        unit = "";
+        this.creationDate = System.currentTimeMillis();
+        this.unit = "";
+        this.userId = Utils.formatId(id);
     }
 
     public Order() {
@@ -102,5 +105,16 @@ public class Order {
 
     public boolean isComplete() {
         return buyQty - getSoldQty() < 1;
+    }
+
+    public double getRemainingSaleTotal() {
+        if(sellPricePerUnit != 0.0) {
+            return sellPricePerUnit * buyQty;
+        } else if (sellPercentage != 0.0) {
+            double buyTotal = buyQty * buyPricePerUnit;
+            return buyTotal + buyTotal * (sellPercentage / 100);
+        } else {
+            return 0.0;
+        }
     }
 }
