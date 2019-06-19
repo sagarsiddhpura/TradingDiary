@@ -32,7 +32,7 @@ public class CompletedOrdersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.tasks_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Completed Orders");
+        getSupportActionBar().setTitle("Order History");
         Utils.setupSystemUI(this);
 
         setupList();

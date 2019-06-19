@@ -20,10 +20,8 @@ import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.edit.EditOrderActivity;
 import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import io.paperdb.Paper;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
 //            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
 //            intent.putExtra("IS_NEW", true);
 //            startActivity(intent);
+
+            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
+            intent.putExtra("ORDER_ID", "1560936197335");
+            startActivity(intent);
         }
     }
 
@@ -94,22 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private void deleteOrder(String id) {
-        boolean hasChanged = false;
-        Iterator<Order> iterator = orders.iterator();
-        while (iterator.hasNext()) {
-            Order event = iterator.next();
-            if(event.getId().equals(id)) {
-//                addToCompletedEvents(event);
-                iterator.remove();
-                hasChanged = true;
-            }
-        }
-        if(hasChanged) {
-            Paper.book().write("orders", orders);
-        }
     }
 
     private void refreshList(ArrayList<Order> orders) {

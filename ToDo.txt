@@ -1,11 +1,6 @@
-add the total percentage and the sell value appear automatically
- - changes to edit completed order
 
 Add filters to the main screen to search order or name
 Also, the main listview can show with the date filter, filter by recently added
-History clear option from the screen but not from the database
-Main order & History order delete option
-
 
 Done
 All inputs & outputs values in points (*.)
@@ -15,3 +10,9 @@ Add Total buying value in add order
 Updated Sale remaining on main screen
 Remove the slide delete button add corner delete button (prompt for delete option)
 Unique order id generation for each user across all users
+
+Updated editorder sell order to disable swipe and have delete icon
+add the total percentage and the sell value appear automatically
+order not editable when completed or in history
+dont delete completed orders. show them on main screen with different color
+change completed orders to deleted orders

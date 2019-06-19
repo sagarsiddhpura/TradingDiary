@@ -29,7 +29,7 @@ import java.util.Iterator;
 
 public class EditOrderActivity extends AppCompatActivity {
 
-    private EditText name = null;
+    private EditText name;
     private EditText buyQty;
     private EditText buyPrice;
     private EditText estimatedSellPricePerUnit;
@@ -76,7 +76,13 @@ public class EditOrderActivity extends AppCompatActivity {
             order = new Order(String.valueOf(System.currentTimeMillis()), "");
         } else {
             order = Utils.getOrder(orderId);
-            loadOrder(order);
+            if(order == null) {
+                Toast.makeText(getApplicationContext(),"Error loading Order.",Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            } else {
+                loadOrder(order);
+            }
         }
 
         Utils.hideKeyBoard(this);
@@ -104,7 +110,7 @@ public class EditOrderActivity extends AppCompatActivity {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(sellPrice.getText() == null || sellPrice.getText().toString().equals("") || sellQty.getText() == null || sellQty.getText().toString().equals("")) {
+                        if(getDouble(sellPrice) == 0.0 || getDouble(sellQty) == 0.0) {
                             Toast.makeText(getApplicationContext(),"Please Enter valid Quantity and Price per unit",Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -266,8 +272,6 @@ public class EditOrderActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.orders_rv);
         adapter = new SellOrderAdapter(this);
         recyclerView.setAdapter(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(adapter));
-        touchHelper.attachToRecyclerView(recyclerView);
         LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down);
         recyclerView.setLayoutAnimation(animationController);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -330,15 +334,8 @@ public class EditOrderActivity extends AppCompatActivity {
         order.sellPricePerUnit = getDouble(estimatedSellPricePerUnit);
         order.sellPercentage = getDouble(estimatedSellPercentage);
 
-        if(order.isComplete()) {
-            Utils.deleteOrder(order.id);
-            Utils.saveCompletedOrder(order);
-            Toast.makeText(getApplicationContext(),"Order saved and moved to completed orders...", Toast.LENGTH_LONG).show();
-        } else {
-            Utils.deleteCompletedOrder(order.id);
-            Utils.saveOrder(order);
-            Toast.makeText(getApplicationContext(),"Order saved...", Toast.LENGTH_LONG).show();
-        }
+        Utils.saveOrder(order);
+        Toast.makeText(getApplicationContext(),"Order saved...", Toast.LENGTH_LONG).show();
         finish();
     }
 

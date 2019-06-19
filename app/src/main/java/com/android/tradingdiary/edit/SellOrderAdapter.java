@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,19 +33,27 @@ public class SellOrderAdapter extends RecyclerView.Adapter<SellOrderAdapter.View
         private TextView qty;
         private TextView price;
         private TextView total;
+        private ImageView delete;
 
         private ViewHolder(View itemView, int type) {
             super(itemView);
             qty = itemView.findViewById(R.id.order_qty);
             price = itemView.findViewById(R.id.order_price);
             total = itemView.findViewById(R.id.total_price);
+            delete = itemView.findViewById(R.id.delete);
         }
 
-        private void bind(SellOrder item_) {
+        private void bind(final SellOrder item_) {
             item = item_;
             qty.setText("Quantity: " + item_.getSellQty());
             price.setText("Price(Unit): " + item_.getSellPrice());
             total.setText("" + (item_.getSellQty() * item_.getSellPrice()));
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                mEventItemActionListener.onItemSwiped(item_.getId());
+                }
+            });
         }
     }
 

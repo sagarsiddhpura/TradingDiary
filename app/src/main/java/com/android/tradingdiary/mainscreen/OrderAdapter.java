@@ -70,6 +70,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                     mEventItemActionListener.onItemSwiped(item_.getId());
                 }
             });
+            if(item_.isComplete()) {
+                mCard.setCardBackgroundColor(context.getResources().getColor(R.color.black_negative));
+            } else {
+                mCard.setCardBackgroundColor(context.getResources().getColor(R.color.teal_700));
+            }
         }
     }
 
