@@ -57,9 +57,9 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
         boolean isNew = intent.getBooleanExtra("IS_NEW", false);
 
         name = findViewById(R.id.title_edit);
-        buyQty = findViewById(R.id.qty_edit);
-        buyPrice = findViewById(R.id.price_per_unit_edit);
-        sellingPricePerUnit = findViewById(R.id.target_selling_price_per_unit_edit);
+        buyQty = findViewById(R.id.buy_qty);
+        buyPrice = findViewById(R.id.buy_price_per_unit);
+        sellingPricePerUnit = findViewById(R.id.estimated_sell_price_per_unit);
         sellingPriceTotal = findViewById(R.id.estimated_total_selling_price);
         estimatedProfitLoss = findViewById(R.id.estimated_profit_loss);
         estimatedProfitLossHint = findViewById(R.id.profit_loss_hint);
@@ -103,12 +103,12 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"Please Enter valid Quantity and Price per unit",Toast.LENGTH_LONG).show();
                             return;
                         }
-                        if(!order.isSellQuantityAllowed(getInt(sellQty))) {
+                        if(!order.isSellQuantityAllowed(getDouble(sellQty))) {
                             Toast.makeText(getApplicationContext(),"Sell Quantity cannot be more than items remaining",Toast.LENGTH_LONG).show();
                             return;
                         }
-                        order.sellOrders.add(new SellOrder(String.valueOf(System.currentTimeMillis()), "", Double.parseDouble(sellPrice.getText().toString()),
-                                Integer.parseInt(sellQty.getText().toString())));
+                        order.sellOrders.add(new SellOrder(String.valueOf(System.currentTimeMillis()), "", getDouble(sellPrice),
+                                getDouble(sellQty)));
                         dialog.dismiss();
                         refreshList(order.sellOrders);
                         setProfitLossData();
@@ -123,7 +123,7 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    sellingPriceTotal.setText(String.valueOf(getDouble(sellingPricePerUnit) * getInt(buyQty)));
+                    sellingPriceTotal.setText(String.valueOf(getDouble(sellingPricePerUnit) * getDouble(buyQty)));
                     setProfitLossData();
                 }catch (Exception e) {
                     sellingPriceTotal.setText("0.0");
@@ -138,7 +138,7 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    sellingPriceTotal.setText(String.valueOf(getDouble(sellingPricePerUnit) * getInt(buyQty)));
+                    sellingPriceTotal.setText(String.valueOf(getDouble(sellingPricePerUnit) * getDouble(buyQty)));
                     setProfitLossData();
                 } catch (Exception e) {
                     sellingPriceTotal.setText("0.0");
@@ -175,7 +175,7 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
     }
 
     private void setProfitLossData() {
-        double estimatedProfitLossValue = (getInt(buyQty) * getDouble(sellingPricePerUnit)) - (getInt(buyQty) * getDouble(buyPrice));
+        double estimatedProfitLossValue = (getDouble(buyQty) * getDouble(sellingPricePerUnit)) - (getDouble(buyQty) * getDouble(buyPrice));
         if(estimatedProfitLossValue > 0) {
             estimatedProfitLoss.setText(String.valueOf(estimatedProfitLossValue));
             estimatedProfitLossHint.setHint("Est. Profit");
@@ -193,12 +193,12 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
         }
     }
 
-    private int getInt(EditText buyQty) {
-        return Integer.parseInt(buyQty.getText().toString());
-    }
-
     private double getDouble(EditText sellingPricePerUnit) {
-        return Double.parseDouble(sellingPricePerUnit.getText().toString());
+        try {
+            return Double.parseDouble(sellingPricePerUnit.getText().toString());
+        }catch (Exception e) {
+            return 0.0;
+        }
     }
 
     private void setupSellOrdersList(final Order order) {
@@ -263,13 +263,9 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
         }
 
         order.name = name.getText().toString();
-        order.buyQty = Integer.parseInt(buyQty.getText().toString());
-        order.buyPricePerUnit = Double.parseDouble(buyPrice.getText().toString());
-        try {
-            order.sellPricePerUnit = Double.parseDouble(sellingPricePerUnit.getText().toString());
-        } catch (Exception e) {
-            order.sellPricePerUnit = 0.0;
-        }
+        order.buyQty = getDouble(buyQty);
+        order.buyPricePerUnit = getDouble(buyPrice);
+        order.sellPricePerUnit = getDouble(sellingPricePerUnit);
 
         Utils.saveCompletedOrder(order);
         Toast.makeText(getApplicationContext(),"Order saved...", Toast.LENGTH_LONG).show();

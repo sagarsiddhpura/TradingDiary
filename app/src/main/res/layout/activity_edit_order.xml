@@ -26,7 +26,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="64dp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/spacing_normal"
@@ -34,7 +33,6 @@
                         android:focusable="true"
                         android:hint="Order Name"
                         android:textColorHint="@color/white_negative"
-                        app:boxBackgroundColor="@color/white_lighter"
                         app:counterTextAppearance="@style/CounterTextAppearance">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -51,200 +49,305 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="2">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/spacing_normal"
-                            android:layout_marginRight="@dimen/spacing_normal"
-                            android:hint="@string/quantity"
-                            android:textColorHint="@color/white_negative"
-                            app:boxBackgroundColor="@android:color/transparent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/qty_edit"
-                                android:inputType="number"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:backgroundTint="@color/white"
-                                android:drawableStart="@drawable/ic_quantity"
-                                android:drawablePadding="@dimen/spacing_normal"
-                                android:textColor="@drawable/custom_edit_text_color"
-                                android:textSize="@dimen/font_normal"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/spacing_normal"
-                            android:hint="@string/price_per_unit"
-                            android:textColorHint="@color/white_negative"
-                            app:boxBackgroundColor="@android:color/transparent">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/price_per_unit_edit"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"
-                                android:backgroundTint="@color/white"
-                                android:drawableStart="@drawable/ic_money"
-                                android:drawablePadding="@dimen/spacing_normal"
-                                android:textColor="@drawable/custom_edit_text_color"
-                                android:textSize="@dimen/font_normal"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/white_lighter_edittext"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:layout_marginRight="@dimen/spacing_normal"
+                    android:layout_weight="2">
 
                 <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_normal"
                         android:layout_marginRight="@dimen/spacing_normal"
-                        android:hint="@string/target_selling_price"
+                        android:hint="@string/quantity"
                         android:textColorHint="@color/white_negative"
                         app:boxBackgroundColor="@android:color/transparent">
 
                     <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/target_selling_price_per_unit_edit"
+                            android:id="@+id/buy_qty"
+                            android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
                             android:backgroundTint="@color/white"
-                            android:drawableStart="@drawable/ic_price"
+                            android:drawableStart="@drawable/ic_quantity"
                             android:drawablePadding="@dimen/spacing_normal"
                             android:textColor="@drawable/custom_edit_text_color"
                             android:textSize="@dimen/font_normal"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
-                        android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="2">
+                        android:hint="@string/unit"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/buy_unit"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/spacing_normal"
-                            android:layout_marginRight="@dimen/spacing_normal"
-                            android:hint="@string/total_selling_price"
-                            android:textColorHint="@color/white_negative"
-                            app:boxBackgroundColor="@android:color/transparent">
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_unit"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/estimated_total_selling_price"
-                                android:inputType="number"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:backgroundTint="@color/white"
-                                android:enabled="false"
-                                android:drawableStart="@drawable/ic_total"
-                                android:drawablePadding="@dimen/spacing_normal"
-                                android:textColor="@drawable/custom_edit_text_color"
-                                android:textSize="@dimen/font_normal"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                            android:id="@+id/profit_loss_hint"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/spacing_normal"
-                            android:hint="@string/estimated_profit"
-                            android:textColorHint="@color/white_negative"
-                            app:boxBackgroundColor="@android:color/transparent">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/white_lighter_edittext"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:layout_marginRight="@dimen/spacing_normal"
+                    android:layout_weight="2">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/estimated_profit_loss"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"
-                                android:enabled="false"
-                                android:backgroundTint="@color/white"
-                                android:drawableStart="@drawable/ic_profit"
-                                android:drawablePadding="@dimen/spacing_normal"
-                                android:textColor="@drawable/custom_edit_text_color"
-                                android:textSize="@dimen/font_normal"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="2">
+                        android:hint="@string/price_per_unit"
+                        android:layout_marginRight="@dimen/spacing_normal"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/buy_price_per_unit"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/spacing_normal"
-                            android:layout_marginRight="@dimen/spacing_normal"
-                            android:hint="@string/actual_total_sale"
-                            android:textColorHint="@color/white_negative"
-                            app:boxBackgroundColor="@android:color/transparent">
+                            android:inputType="numberDecimal"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_money"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/actual_total_selling_price"
-                                android:inputType="number"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:backgroundTint="@color/white"
-                                android:enabled="false"
-                                android:drawableStart="@drawable/ic_total"
-                                android:drawablePadding="@dimen/spacing_normal"
-                                android:textColor="@drawable/custom_edit_text_color"
-                                android:textSize="@dimen/font_normal"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/buy_total"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                            android:id="@+id/actual_profit_loss_hint"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/buy_total"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/spacing_normal"
-                            android:hint="@string/actual_profit"
-                            android:textColorHint="@color/white_negative"
-                            app:boxBackgroundColor="@android:color/transparent">
+                            android:enabled="false"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_total"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/actual_profit_loss"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="numberDecimal"
-                                android:layout_marginBottom="@dimen/spacing_normal"
-                                android:enabled="false"
-                                android:backgroundTint="@color/white"
-                                android:drawableStart="@drawable/ic_profit"
-                                android:drawablePadding="@dimen/spacing_normal"
-                                android:textColor="@drawable/custom_edit_text_color"
-                                android:textSize="@dimen/font_normal"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
-                </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/white_lighter"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:layout_marginRight="@dimen/spacing_normal"
+                    android:layout_weight="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/target_selling_price"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/estimated_sell_price_per_unit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_money"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                        android:text="-OR-"
+                        android:padding="8dp"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:textColor="@drawable/custom_edit_text_color"
+                        android:id="@+id/textView"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:id="@+id/target_selling_percentage_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/target_selling_percentage"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/estimated_sell_percentage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_percentage"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:background="@color/white_lighter"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:layout_marginRight="@dimen/spacing_normal"
+                    android:layout_weight="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/spacing_normal"
+                        android:hint="@string/total_selling_price"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/estimated_total_selling_price"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:enabled="false"
+                            android:drawableStart="@drawable/ic_total"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:id="@+id/profit_loss_hint"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/estimated_profit"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/estimated_profit_loss"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:enabled="false"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_profit"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/white_lighter"
+                    android:layout_marginLeft="@dimen/spacing_normal"
+                    android:layout_marginRight="@dimen/spacing_normal"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:layout_weight="2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/spacing_normal"
+                        android:hint="@string/actual_total_sale"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/actual_total_selling_price"
+                            android:inputType="number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:enabled="false"
+                            android:drawableStart="@drawable/ic_total"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:id="@+id/actual_profit_loss_hint"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/actual_profit"
+                        android:textColorHint="@color/white_negative"
+                        app:boxBackgroundColor="@android:color/transparent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/actual_profit_loss"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:enabled="false"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/ic_profit"
+                            android:drawablePadding="@dimen/spacing_normal"
+                            android:textColor="@drawable/custom_edit_text_color"
+                            android:textSize="@dimen/font_normal"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             </LinearLayout>
 

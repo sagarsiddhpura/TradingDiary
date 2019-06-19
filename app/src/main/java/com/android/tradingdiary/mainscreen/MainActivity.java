@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import com.android.tradingdiary.BuildConfig;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.completedorders.CompletedOrdersActivity;
 import com.android.tradingdiary.data.Order;
@@ -23,7 +24,7 @@ import io.paperdb.Paper;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class MainActivityJava extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private OrderAdapter adapter;
     private ArrayList<Order> orders;
@@ -43,11 +44,17 @@ public class MainActivityJava extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                Intent intent = new Intent(MainActivityJava.this, EditOrderActivity.class);
+                Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
                 intent.putExtra("IS_NEW", true);
                 startActivity(intent);
             }
         });
+
+        if(BuildConfig.DEBUG) {
+            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
+            intent.putExtra("IS_NEW", true);
+            startActivity(intent);
+        }
     }
 
     private void setupList() {
@@ -74,7 +81,7 @@ public class MainActivityJava extends AppCompatActivity {
 
             @Override
             public void onItemClicked(String id) {
-                Intent intent = new Intent(MainActivityJava.this, EditOrderActivity.class);
+                Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
                 intent.putExtra("ORDER_ID", id);
                 startActivity(intent);
             }
@@ -136,7 +143,7 @@ public class MainActivityJava extends AppCompatActivity {
     }
 
     private void showCompletedOrders() {
-        Intent intent = new Intent(MainActivityJava.this, CompletedOrdersActivity.class);
+        Intent intent = new Intent(MainActivity.this, CompletedOrdersActivity.class);
         startActivity(intent);
     }
 }

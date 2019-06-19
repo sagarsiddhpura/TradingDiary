@@ -43,6 +43,7 @@
         <color name="white_negative">#7fffffff</color>
         <color name="white_light">#50ffffff</color>
         <color name="white_lighter">#0affffff</color>
+        <color name="white_lighter_edittext">#0fffffff</color>
 
         <color name="gray">#e0e0e0</color>
         <color name="gray_light">#f7f7f7</color>

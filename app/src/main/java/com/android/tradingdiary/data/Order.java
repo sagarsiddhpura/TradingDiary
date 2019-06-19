@@ -1,26 +1,29 @@
 package com.android.tradingdiary.data;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class Order {
     public String id;
     public String name;
     public Double buyPricePerUnit;
-    public int buyQty;
+    public Double buyQty;
     public Double sellPricePerUnit;
     public ArrayList<SellOrder> sellOrders;
     public long creationDate;
     public long userId;
+    public String unit;
+    public double sellPercentage;
 
     public Order(String id, String name) {
         this.id = id;
         this.name = name;
         this.buyPricePerUnit = 0.0;
-        this.buyQty = 0;
+        this.buyQty = 0.0;
         this.sellOrders = new ArrayList<>();
-        sellPricePerUnit = 0.0;
+        this.sellPricePerUnit = 0.0;
+        this.sellPercentage = 0.0;
         creationDate = System.currentTimeMillis();
+        unit = "";
     }
 
     public Order() {
@@ -50,15 +53,15 @@ public class Order {
         this.buyPricePerUnit = buyPricePerUnit;
     }
 
-    public int getBuyQty() {
+    public Double getBuyQty() {
         return buyQty;
     }
 
-    public void setBuyQty(int buyQty) {
+    public void setBuyQty(Double buyQty) {
         this.buyQty = buyQty;
     }
 
-    public boolean isSellQuantityAllowed(int qty) {
+    public boolean isSellQuantityAllowed(double qty) {
         if(buyQty - (getSoldQty() + qty) < 0) {
             return false;
         } else {
@@ -81,7 +84,7 @@ public class Order {
         return sellOrders;
     }
 
-    public int getRemainingSellQty() {
+    public double getRemainingSellQty() {
         return buyQty - getSoldQty();
     }
 

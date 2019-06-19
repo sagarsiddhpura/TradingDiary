@@ -1,0 +1,15 @@
+add the total percentage and the sell value appear automatically
+ - changes to edit completed order
+
+Remove the slide delete button add corner delete button (prompt for delete option)
+Add filters to the main screen to search order or name
+Also, the main listview can show with the date filter, filter by recently added
+History clear option from the screen but not from the database
+Main order & History order delete option
+Unique order id generation for each user across all users
+
+
+Done
+All inputs & outputs values in points (*.)
+Also add the Unit edit text to enter
+Add Total buying value in add order

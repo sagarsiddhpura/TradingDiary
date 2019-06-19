@@ -4,9 +4,9 @@ public class SellOrder {
     public String id;
     public String name;
     public Double sellPrice;
-    public int sellQty;
+    public Double sellQty;
 
-    public SellOrder(String id, String name, Double sellPrice, int sellQty) {
+    public SellOrder(String id, String name, Double sellPrice, Double sellQty) {
         this.id = id;
         this.name = name;
         this.sellPrice = sellPrice;
@@ -40,11 +40,11 @@ public class SellOrder {
         this.sellPrice = sellPrice;
     }
 
-    public int getSellQty() {
+    public Double getSellQty() {
         return sellQty;
     }
 
-    public void setSellQty(int sellQty) {
+    public void setSellQty(Double sellQty) {
         this.sellQty = sellQty;
     }
 }

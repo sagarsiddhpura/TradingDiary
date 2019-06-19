@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TradingDiary</string>
     <string name="quantity">Buy Quantity</string>
-    <string name="price_per_unit">Buy Price (Unit)</string>
+    <string name="price_per_unit">Buy Price (1 Unit)</string>
     <string name="yes">Yes</string>
     <string name="ok">OK</string>
     <string name="no">NO</string>
@@ -10,9 +10,12 @@
     <string name="total_buying_price">Total Buying Price</string>
     <string name="total_selling_price">Est. Sale Total</string>
     <string name="done">Done</string>
-    <string name="target_selling_price">Est. Sale Price (Unit)</string>
+    <string name="target_selling_price">Est. Sale Price (1 Unit)</string>
     <string name="estimated_profit">Est. Profit</string>
     <string name="actual_profit">Actual Profit</string>
     <string name="actual_total_sale">Actual Sale Total</string>
     <string name="completed_orders">Completed Orders</string>
+    <string name="target_selling_percentage">Est. Sale Percentage</string>
+    <string name="unit">Unit</string>
+    <string name="buy_total">Buy Total</string>
 </resources>

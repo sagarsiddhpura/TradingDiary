@@ -32,8 +32,8 @@ public class EditOrderActivity extends AppCompatActivity {
     private EditText name = null;
     private EditText buyQty;
     private EditText buyPrice;
-    private EditText sellingPricePerUnit;
-    private EditText sellingPriceTotal;
+    private EditText estimatedSellPricePerUnit;
+    private EditText estimatedSellTotal;
     private EditText estimatedProfitLoss;
     private Order order;
     private SellOrderAdapter adapter;
@@ -42,6 +42,9 @@ public class EditOrderActivity extends AppCompatActivity {
     private EditText actualSaleTotal;
     private TextInputLayout actualProfitLossHint;
     private EditText actualProfitLoss;
+    private EditText estimatedSellPercentage;
+    private EditText buyTotal;
+    private EditText buyUnit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +59,13 @@ public class EditOrderActivity extends AppCompatActivity {
         boolean isNew = intent.getBooleanExtra("IS_NEW", false);
 
         name = findViewById(R.id.title_edit);
-        buyQty = findViewById(R.id.qty_edit);
-        buyPrice = findViewById(R.id.price_per_unit_edit);
-        sellingPricePerUnit = findViewById(R.id.target_selling_price_per_unit_edit);
-        sellingPriceTotal = findViewById(R.id.estimated_total_selling_price);
+        buyQty = findViewById(R.id.buy_qty);
+        buyPrice = findViewById(R.id.buy_price_per_unit);
+        buyTotal = findViewById(R.id.buy_total);
+        buyUnit = findViewById(R.id.buy_unit);
+        estimatedSellPricePerUnit = findViewById(R.id.estimated_sell_price_per_unit);
+        estimatedSellPercentage = findViewById(R.id.estimated_sell_percentage);
+        estimatedSellTotal = findViewById(R.id.estimated_total_selling_price);
         estimatedProfitLoss = findViewById(R.id.estimated_profit_loss);
         estimatedProfitLossHint = findViewById(R.id.profit_loss_hint);
         actualSaleTotal = findViewById(R.id.actual_total_selling_price);
@@ -87,7 +93,7 @@ public class EditOrderActivity extends AppCompatActivity {
                 final View dialogView = inflater.inflate(R.layout.dialog_add_sell_order, null);
 
                 final EditText sellPrice = dialogView.findViewById(R.id.sell_order_price_per_unit);
-                sellPrice.setText(String.valueOf(getDouble(sellingPricePerUnit)));
+                sellPrice.setText(String.valueOf(getSellPricePerUnit()));
                 final EditText sellQty = dialogView.findViewById(R.id.sell_order_quantity);
                 sellQty.setText(String.valueOf(order.getRemainingSellQty()));
 
@@ -104,12 +110,12 @@ public class EditOrderActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"Please Enter valid Quantity and Price per unit",Toast.LENGTH_LONG).show();
                             return;
                         }
-                        if(!order.isSellQuantityAllowed(getInt(sellQty))) {
+                        if(!order.isSellQuantityAllowed(getDouble(sellQty))) {
                             Toast.makeText(getApplicationContext(),"Sell Quantity cannot be more than items remaining",Toast.LENGTH_LONG).show();
                             return;
                         }
-                        order.sellOrders.add(new SellOrder(String.valueOf(System.currentTimeMillis()), "", Double.parseDouble(sellPrice.getText().toString()),
-                                Integer.parseInt(sellQty.getText().toString())));
+                        order.sellOrders.add(new SellOrder(String.valueOf(System.currentTimeMillis()), "", getDouble(sellPrice),
+                                getDouble(sellQty)));
                         dialog.dismiss();
                         refreshList(order.sellOrders);
                         setProfitLossData();
@@ -124,25 +130,11 @@ public class EditOrderActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    sellingPriceTotal.setText(String.valueOf(getDouble(sellingPricePerUnit) * getInt(buyQty)));
+                    setBuyTotal();
+                    setSellTotal();
                     setProfitLossData();
                 }catch (Exception e) {
-                    sellingPriceTotal.setText("0.0");
-                    estimatedProfitLoss.setText("0.0");
-                    estimatedProfitLossHint.setHint("Profit");
-                }
-            }
-        });
-
-        sellingPricePerUnit.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    sellingPriceTotal.setText(String.valueOf(getDouble(sellingPricePerUnit) * getInt(buyQty)));
-                    setProfitLossData();
-                } catch (Exception e) {
-                    sellingPriceTotal.setText("0.0");
+                    estimatedSellTotal.setText("0.0");
                     estimatedProfitLoss.setText("0.0");
                     estimatedProfitLossHint.setHint("Profit");
                 }
@@ -154,6 +146,8 @@ public class EditOrderActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
+                    setBuyTotal();
+                    setSellTotal();
                     setProfitLossData();
                 } catch (Exception e) {
                     estimatedProfitLoss.setText("0.0");
@@ -162,22 +156,90 @@ public class EditOrderActivity extends AppCompatActivity {
             }
         });
 
+        estimatedSellPricePerUnit.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(getDouble(estimatedSellPricePerUnit) != 0.0) {
+                        estimatedSellPercentage.setText("");
+                        setSellTotal();
+                        setProfitLossData();
+                    }
+                } catch (Exception e) {
+                    estimatedSellTotal.setText("0.0");
+                    estimatedProfitLoss.setText("0.0");
+                    estimatedProfitLossHint.setHint("Profit");
+                    estimatedSellPercentage.setText("");
+                }
+            }
+        });
+
+        estimatedSellPercentage.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(getDouble(estimatedSellPercentage) != 0.0) {
+                        estimatedSellPricePerUnit.setText("");
+                        setSellTotal();
+                        setProfitLossData();
+                    }
+                } catch (Exception e) {
+                    estimatedSellTotal.setText("0.0");
+                    estimatedProfitLoss.setText("0.0");
+                    estimatedProfitLossHint.setHint("Profit");
+                    estimatedSellPricePerUnit.setText("0.0");
+                }
+            }
+        });
+
         setupSellOrdersList(order);
         actualSaleTotal.setText(String.valueOf(order.getActualSaleTotal()));
+    }
+
+    private void setBuyTotal() {
+        buyTotal.setText(String.valueOf(getbuyTotal()));
+    }
+
+    private double getbuyTotal() {
+        return getDouble(buyQty) * getDouble(buyPrice);
+    }
+
+    private double getSellPricePerUnit() {
+        if(getDouble(buyQty) == 0.0) {
+            return 0.0;
+        }
+        return getSellTotal() / getDouble(buyQty);
+    }
+
+    private void setSellTotal() {
+        estimatedSellTotal.setText(String.valueOf(getSellTotal()));
+    }
+
+    private double getSellTotal() {
+        if(getDouble(estimatedSellPricePerUnit) != 0.0) {
+            return getDouble(estimatedSellPricePerUnit) * getDouble(buyQty);
+        } else if (getDouble(estimatedSellPercentage) != 0.0) {
+            double buyTotal = getDouble(buyQty) * getDouble(buyPrice);
+            return buyTotal + buyTotal * (getDouble(estimatedSellPercentage) / 100);
+        } else {
+            return 0.0;
+        }
     }
 
     private void loadOrder(final Order order) {
         name.setText(order.name);
         buyQty.setText(String.valueOf(order.buyQty));
         buyPrice.setText(String.valueOf(order.buyPricePerUnit));
-        sellingPricePerUnit.setText(String.valueOf(order.sellPricePerUnit));
-        sellingPriceTotal.setText(String.valueOf(order.buyQty * order.sellPricePerUnit));
+        estimatedSellPricePerUnit.setText(String.valueOf(order.sellPricePerUnit));
+        estimatedSellTotal.setText(String.valueOf(order.buyQty * order.sellPricePerUnit));
         setProfitLossData();
     }
 
     private void setProfitLossData() {
-        double estimatedProfitLossValue = (getInt(buyQty) * getDouble(sellingPricePerUnit)) - (getInt(buyQty) * getDouble(buyPrice));
-        if(estimatedProfitLossValue > 0) {
+        double estimatedProfitLossValue = (getSellTotal()) - (getDouble(buyQty) * getDouble(buyPrice));
+        if(estimatedProfitLossValue >= 0) {
             estimatedProfitLoss.setText(String.valueOf(estimatedProfitLossValue));
             estimatedProfitLossHint.setHint("Est. Profit");
         } else {
@@ -185,7 +247,7 @@ public class EditOrderActivity extends AppCompatActivity {
             estimatedProfitLossHint.setHint("Est. Loss");
         }
         double actualProfitLossValue = order.getProfitLoss();
-        if(actualProfitLossValue > 0) {
+        if(actualProfitLossValue >= 0) {
             actualProfitLoss.setText(String.valueOf(actualProfitLossValue));
             actualProfitLossHint.setHint("Actual Profit");
         } else {
@@ -194,12 +256,12 @@ public class EditOrderActivity extends AppCompatActivity {
         }
     }
 
-    private int getInt(EditText buyQty) {
-        return Integer.parseInt(buyQty.getText().toString());
-    }
-
     private double getDouble(EditText sellingPricePerUnit) {
-        return Double.parseDouble(sellingPricePerUnit.getText().toString());
+        try {
+            return Double.parseDouble(sellingPricePerUnit.getText().toString());
+        }catch (Exception e) {
+            return 0.0;
+        }
     }
 
     private void setupSellOrdersList(final Order order) {
@@ -262,19 +324,13 @@ public class EditOrderActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Please enter Buy Price per Unit",Toast.LENGTH_LONG).show();
             return;
         }
-        if(sellingPricePerUnit.getText() == null || sellingPricePerUnit.getText().toString().equals("")) {
-            Toast.makeText(getApplicationContext(),"Please enter Sell Price per Unit",Toast.LENGTH_LONG).show();
-            return;
-        }
 
         order.name = name.getText().toString();
-        order.buyQty = Integer.parseInt(buyQty.getText().toString());
-        order.buyPricePerUnit = Double.parseDouble(buyPrice.getText().toString());
-        try {
-            order.sellPricePerUnit = Double.parseDouble(sellingPricePerUnit.getText().toString());
-        } catch (Exception e) {
-            order.sellPricePerUnit = 0.0;
-        }
+        order.buyQty = getDouble(buyQty);
+        order.unit = buyUnit.getText().toString();
+        order.buyPricePerUnit = getDouble(buyPrice);
+        order.sellPricePerUnit = getDouble(estimatedSellPricePerUnit);
+        order.sellPercentage = getDouble(estimatedSellPercentage);
 
         if(order.isComplete()) {
             Utils.deleteOrder(order.id);
