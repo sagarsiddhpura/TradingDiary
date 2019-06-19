@@ -1,5 +1,7 @@
 package com.android.tradingdiary.mainscreen;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,24 +11,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.BuildConfig;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.completedorders.CompletedOrdersActivity;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.edit.EditOrderActivity;
+import com.android.tradingdiary.utils.DateTimeUtils;
 import com.android.tradingdiary.utils.Utils;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private OrderAdapter adapter;
     private ArrayList<Order> orders;
+    private String filter = "";
+    private Chip chip;
+    private long filterTimeStart;
+    private long filterTimeEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupList();
 
+        chip = findViewById(R.id.chip);
         FloatingActionButton fab = findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
 //            intent.putExtra("IS_NEW", true);
 //            startActivity(intent);
 
-            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
-            intent.putExtra("ORDER_ID", "1560936197335");
-            startActivity(intent);
+//            Intent intent = new Intent(MainActivity.this, EditOrderActivity.class);
+//            intent.putExtra("ORDER_ID", "1560936197335");
+//            startActivity(intent);
         }
     }
 
@@ -99,7 +111,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshList(ArrayList<Order> orders) {
-        adapter.setEntities(orders);
+        ArrayList<Order> ordersFiltered = orders;
+        if(filter != null && !filter.equals("")) {
+            if(filter.equals("Today")) {
+                ordersFiltered = new ArrayList<>();
+                for (Order order : orders) {
+                    if (order.creationDate >= DateTimeUtils.getTodayStart()) {
+                        ordersFiltered.add(order);
+                    }
+                }
+            } else if(filter.equals("RecentlyAdded")) {
+                ordersFiltered = new ArrayList<>();
+                for (Order order : orders) {
+                    if (order.creationDate >= DateTimeUtils.getPrevious7DaysEnd()) {
+                        ordersFiltered.add(order);
+                    }
+                }
+            } else if(filter.equals("Date")) {
+                ordersFiltered = new ArrayList<>();
+                for (Order order : orders) {
+                    long diff = order.creationDate - DateTimeUtils.getTodayStart();
+                    if (order.creationDate > filterTimeStart && order.creationDate < filterTimeEnd) {
+                        ordersFiltered.add(order);
+                    }
+                }
+            }
+        }
+        adapter.setEntities(ordersFiltered);
     }
 
     @Override
@@ -127,6 +165,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_completed_orders:
                 showCompletedOrders();
                 break;
+            case R.id.filter_none:
+                removeFilter();
+                break;
+            case R.id.filter_today:
+                filterTodayOrders();
+                break;
+            case R.id.filter_date:
+                filterDateOrders();
+                break;
+            case R.id.filter_recently_added:
+                filterRecentlyCompletedOrders();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -136,8 +186,65 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    private void filterRecentlyCompletedOrders() {
+        filter = "RecentlyAdded";
+        chip.setText("Recently Added");
+        chip.setVisibility(View.VISIBLE);
+        refreshList(orders);
+    }
+
+    private void filterDateOrders() {
+        long date = DateTimeUtils.getCurrentTimeWithoutSec();
+        FragmentManager fm = getSupportFragmentManager();
+        DateDialogFragment dialogFragment = DateDialogFragment.newInstance(date, false);
+        dialogFragment.show(fm, "DATE");
+    }
+
+    private void removeFilter() {
+        filter = "";
+        chip.setText("");
+        chip.setVisibility(View.GONE);
+        refreshList(orders);
+    }
+
+    private void filterTodayOrders() {
+        filter = "Today";
+        chip.setText("Today");
+        chip.setVisibility(View.VISIBLE);
+        refreshList(orders);
+    }
+
     private void showCompletedOrders() {
         Intent intent = new Intent(MainActivity.this, CompletedOrdersActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        filterTimeStart = data.getLongExtra(DateDialogFragment.EXTRA_DATE, 0);
+        Calendar dayEnd = Calendar.getInstance();
+        dayEnd.setTimeInMillis(filterTimeStart);
+
+        dayEnd.set(Calendar.HOUR_OF_DAY, 0);
+        dayEnd.set(Calendar.MINUTE, 0);
+        dayEnd.set(Calendar.SECOND, 0);
+        filterTimeStart = dayEnd.getTimeInMillis();
+
+        dayEnd.set(Calendar.HOUR_OF_DAY, 23);
+        dayEnd.set(Calendar.MINUTE, 59);
+        dayEnd.set(Calendar.SECOND, 59);
+        filterTimeEnd = dayEnd.getTimeInMillis();
+
+        filter = "Date";
+        chip.setText(DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.DATE));
+        chip.setVisibility(View.VISIBLE);
+        refreshList(orders);
+        Toast.makeText(getApplicationContext(),"filterTimeStart:" + DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.DATE)
+                + " " + DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.TIME) + ", filterTimeEnd:" +
+                DateTimeUtils.longToString(filterTimeEnd, DateTimeUtils.DATE)
+                + " " + DateTimeUtils.longToString(filterTimeEnd, DateTimeUtils.TIME) ,Toast.LENGTH_LONG).show();
     }
 }

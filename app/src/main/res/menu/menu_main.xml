@@ -3,10 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_filter"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/filter_none"
+                android:title="@string/none"/>
+            <item
+                android:id="@+id/filter_today"
+                android:title="@string/today"/>
+            <item
+                android:id="@+id/filter_date"
+                android:title="@string/pick_date"/>
+            <item
+                android:id="@+id/filter_recently_added"
+                android:title="@string/recently_added"/>
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/action_completed_orders"
-        android:name="@string/completed_orders"
+        android:name="@string/order_history"
         android:icon="@drawable/ic_history"
-        android:title="@string/completed_orders"
-        app:showAsAction="always"
+        android:title="@string/order_history"
+        app:showAsAction="ifRoom"
         android:visible="true"/>
 </menu>

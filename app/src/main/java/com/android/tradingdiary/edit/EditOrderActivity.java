@@ -15,16 +15,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import com.android.tradingdiary.BuildConfig;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.data.SellOrder;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.mainscreen.ItemTouchHelperCallback;
+import com.android.tradingdiary.utils.DateTimeUtils;
 import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 
 public class EditOrderActivity extends AppCompatActivity {
@@ -73,7 +76,28 @@ public class EditOrderActivity extends AppCompatActivity {
         actualProfitLossHint = findViewById(R.id.actual_profit_loss_hint);
 
         if(isNew) {
-            order = new Order(String.valueOf(System.currentTimeMillis()), "");
+            if(BuildConfig.DEBUG) {
+                // 30-may
+//                Calendar todayStart = Calendar.getInstance();
+//                todayStart.set(Calendar.HOUR_OF_DAY, 4);
+//                todayStart.set(Calendar.MINUTE, 5);
+//                todayStart.set(Calendar.SECOND, 5);
+//                todayStart.set(Calendar.DAY_OF_MONTH, -1);
+
+                // 18-June
+                Calendar todayStart = Calendar.getInstance();
+                todayStart.set(Calendar.HOUR_OF_DAY, 4);
+                todayStart.set(Calendar.MINUTE, 5);
+                todayStart.set(Calendar.SECOND, 5);
+                todayStart.set(Calendar.DAY_OF_MONTH, 11);
+                String name1 = DateTimeUtils.longToString(todayStart.getTimeInMillis(), DateTimeUtils.DATE)
+                        + " " + DateTimeUtils.longToString(todayStart.getTimeInMillis(), DateTimeUtils.TIME);
+                order = new Order(String.valueOf(todayStart.getTimeInMillis()), name1);
+                name.setText(name1);
+                order.creationDate = todayStart.getTimeInMillis();
+            } else {
+                order = new Order(String.valueOf(System.currentTimeMillis()), "");
+            }
         } else {
             order = Utils.getOrder(orderId);
             if(order == null) {

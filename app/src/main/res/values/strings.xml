@@ -18,4 +18,12 @@
     <string name="target_selling_percentage">Est. Sale Percentage</string>
     <string name="unit">Unit</string>
     <string name="buy_total">Buy Total</string>
+    <string name="order_history">Orders History</string>
+    <string name="filter">Filter</string>
+    <string name="today">Today</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="none">None</string>
+    <string name="recently_completed">Recently Completed</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="date">Date</string>
 </resources>

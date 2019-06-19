@@ -1,10 +1,14 @@
 package com.android.tradingdiary.utils;
 
+import android.content.Context;
+import com.android.tradingdiary.R;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class DateTimeUtils {
 
@@ -167,6 +171,12 @@ public class DateTimeUtils {
         return calToLong(calendar);
     }
 
+    public static long getPrevious7DaysEnd() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.WEEK_OF_MONTH, -1);
+        return calToLong(calendar);
+    }
+
     public static float getTodayProgress() {
         return ((float) (System.currentTimeMillis() - getTodayStart()) / (getTodayEnd() - getTodayStart())) * 100;
     }
@@ -190,6 +200,6 @@ public class DateTimeUtils {
         } else {
             return calendar.getDisplayName(field, Calendar.SHORT, Locale.getDefault());
         }
-    }
 
+    }
 }
