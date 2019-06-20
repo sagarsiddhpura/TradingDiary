@@ -1,5 +1,6 @@
 package com.android.tradingdiary.completedorders;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.data.SellOrder;
+import com.android.tradingdiary.edit.EditOrderActivity;
 import com.android.tradingdiary.edit.SellOrderAdapter;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.utils.Utils;
@@ -177,8 +180,18 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
     }
 
     private void deleteOrder() {
-        Utils.deleteCompletedOrder(order.id);
-        Toast.makeText(getApplicationContext(),"Order deleted...",Toast.LENGTH_LONG).show();
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditCompletedOrderActivity.this);
+        builder.setMessage("Are you sure you want to delete this Order?")
+                .setTitle("Delete Order");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int itemId) {
+                Utils.deleteCompletedOrder(order.id);
+                Toast.makeText(getApplicationContext(),"Order deleted...",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+        builder.setNegativeButton("CANCEL",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

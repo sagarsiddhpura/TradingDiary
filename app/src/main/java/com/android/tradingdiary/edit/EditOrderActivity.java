@@ -1,5 +1,6 @@
 package com.android.tradingdiary.edit;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,6 +22,7 @@ import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.data.SellOrder;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.mainscreen.ItemTouchHelperCallback;
+import com.android.tradingdiary.mainscreen.MainActivity;
 import com.android.tradingdiary.utils.DateTimeUtils;
 import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -394,8 +396,18 @@ public class EditOrderActivity extends AppCompatActivity {
     }
 
     private void deleteOrder() {
-        Utils.deleteOrder(order.id);
-        Toast.makeText(getApplicationContext(),"Order deleted...",Toast.LENGTH_LONG).show();
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditOrderActivity.this);
+        builder.setMessage("Are you sure you want to delete this Order?")
+                .setTitle("Delete Order");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int itemId) {
+                Utils.deleteOrder(order.id);
+                Toast.makeText(getApplicationContext(),"Order deleted...",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+        builder.setNegativeButton("CANCEL",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

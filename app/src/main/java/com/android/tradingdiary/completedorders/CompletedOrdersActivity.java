@@ -2,8 +2,12 @@ package com.android.tradingdiary.completedorders;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -88,4 +92,44 @@ public class CompletedOrdersActivity extends AppCompatActivity {
         orders = Utils.getCompletedOrders();
         refreshList(orders);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_completed, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete_all_orders:
+                deleteAllOrders();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void deleteAllOrders() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CompletedOrdersActivity.this);
+        builder.setMessage("Are you sure you want to delete all Orders?")
+                .setTitle("Delete All Orders");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int itemId) {
+                Utils.deleteAllCompletedOrders();
+                Toast.makeText(getApplicationContext(),"All Orders deleted...",Toast.LENGTH_LONG).show();
+                orders = Utils.getOrders();
+                refreshList(orders);
+            }
+        });
+        builder.setNegativeButton("CANCEL",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }

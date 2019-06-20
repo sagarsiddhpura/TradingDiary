@@ -1,4 +1,3 @@
-Add filters to the main screen to search order or name
 
 Done
 All inputs & outputs values in points (*.)
@@ -16,7 +15,13 @@ dont delete completed orders. show them on main screen with different color
 change completed orders to deleted orders
 
 Also, the main listview can show with the date filter, filter by recently added
+Add filters to the main screen to search order or name
 
+
+qty is not saved as decimal
+confirmation before delete
+delete all orders on main and history screen
+change orderid style
 
 
 https://github.com/savvisingh/DateRangePicker

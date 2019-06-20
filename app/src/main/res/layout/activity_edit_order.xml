@@ -71,7 +71,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/buy_qty"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
@@ -148,7 +148,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/buy_total"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -250,7 +250,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/estimated_total_selling_price"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"
@@ -311,7 +311,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/actual_total_selling_price"
-                            android:inputType="number"
+                            android:inputType="numberDecimal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/white"

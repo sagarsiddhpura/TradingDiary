@@ -62,8 +62,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 mDesc.setText(item_.getRemainingSellQty() + "/" + item_.buyQty + " left");
                 mSub.setText(item_.getRemainingSaleTotal() + " Rs. sale remaining");
             }
-            mId.setText("Order ID: " + item_.userId + " (" + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)
-                    + " " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.TIME) + ")");
+            mId.setText("Order ID: " + item_.userId + "\nCreated: " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)
+                    + " " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.TIME));
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

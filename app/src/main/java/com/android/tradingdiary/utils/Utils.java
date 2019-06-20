@@ -2,7 +2,6 @@ package com.android.tradingdiary.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -16,7 +15,10 @@ import com.android.tradingdiary.data.Order;
 import io.paperdb.Paper;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 
 public class Utils {
@@ -58,15 +60,17 @@ public class Utils {
 
     public static void saveOrder(Order order) {
         ArrayList<Order> orders = getOrders();
+        int index = 0;
         Iterator<Order> iterator = orders.iterator();
         while(iterator.hasNext()) {
             Order currentOrder = iterator.next();
+            index++;
             if(currentOrder.id.equals(order.id)) {
                iterator.remove();
                break;
             }
         }
-        orders.add(order);
+        orders.add(index, order);
         saveOrders(orders);
     }
 
@@ -179,10 +183,20 @@ public class Utils {
     }
 
     public static String formatId(String id) {
-        if(id != null && id.length() > 12) {
-            id = id.substring(id.length() - 8, id.length() - 4) + "-" + id.substring(id.length() - 4);
-            return id;
+        if(id != null) {
+            String date = new SimpleDateFormat("yyyyMMddss").format(new Date());
+            return date + "-" + id.substring(id.length() - 6);
         }
         return id;
+    }
+
+    public static void deleteAllOrders() {
+        ArrayList<Object> orders = new ArrayList<>();
+        Paper.book().write("orders", orders);
+    }
+
+    public static void deleteAllCompletedOrders() {
+        ArrayList<Object> orders = new ArrayList<>();
+        Paper.book().write("completed_orders", orders);
     }
 }

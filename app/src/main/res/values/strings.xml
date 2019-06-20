@@ -27,4 +27,5 @@
     <string name="recently_added">Recently Added</string>
     <string name="date">Date</string>
     <string name="search">Search</string>
+    <string name="delete_all_orders">Delete All Orders</string>
 </resources>
