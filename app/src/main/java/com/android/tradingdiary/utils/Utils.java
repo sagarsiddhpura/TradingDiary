@@ -15,9 +15,9 @@ import com.android.tradingdiary.data.Order;
 import io.paperdb.Paper;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -167,7 +167,7 @@ public class Utils {
 
     public static String formatId(String id) {
         if(id != null) {
-            String date = new SimpleDateFormat("yyyyMMddss").format(new Date());
+            String date = new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
             return date + "-" + id.substring(id.length() - 6);
         }
         return id;
@@ -204,5 +204,11 @@ public class Utils {
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
         }
+    }
+
+
+    public static String formatDouble(Double number) {
+        DecimalFormat formatter = new DecimalFormat("#0.00");
+        return formatter.format(number);
     }
 }

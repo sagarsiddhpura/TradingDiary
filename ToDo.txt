@@ -33,4 +33,8 @@ Fixed: Unit is not loaded on edit screen
 Fixed: Sell percentage is not loaded on edit screen
 Added unit on main screen
 
+updated id format
+Updated decimals to two places
+
+
 https://github.com/savvisingh/DateRangePicker

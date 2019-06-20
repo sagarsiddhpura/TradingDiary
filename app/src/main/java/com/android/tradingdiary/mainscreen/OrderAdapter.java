@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.utils.DateTimeUtils;
+import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.card.MaterialCardView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> implements ItemTouchHelperListener {
@@ -52,15 +54,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             item = item_;
             mTitle.setText(item_.getName());
             if(item_.getRemainingSellQty() == 0) {
-                mDesc.setText(item_.buyQty + " sold");
+                mDesc.setText(Utils.formatDouble(item_.buyQty) + " sold");
                 if(item_.getProfitLoss() > 0) {
-                    mSub.setText("Profit: " +  (item_.getProfitLoss()) + " Rs.");
+                    mSub.setText("Profit: " +  (Utils.formatDouble(item_.getProfitLoss())) + " Rs.");
                 } else {
-                    mSub.setText("Loss: " +  (item_.getProfitLoss() * -1) + " Rs.");
+                    mSub.setText("Loss: " +  (Utils.formatDouble(item_.getProfitLoss() * -1)) + " Rs.");
                 }
             } else {
-                mDesc.setText(item_.getRemainingSellQty() + "/" + item_.buyQty + " " + item_.unit +" left");
-                mSub.setText(item_.getRemainingSaleTotal() + " Rs. sale remaining");
+                mDesc.setText(Utils.formatDouble(item_.getRemainingSellQty()) + "/" + Utils.formatDouble(item_.buyQty) + " " + item_.unit +" left");
+                mSub.setText(Utils.formatDouble(item_.getRemainingSaleTotal()) + " Rs. sale remaining");
             }
             mId.setText("Order ID: " + item_.userId + "\nCreated: " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)
                     + " " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.TIME));

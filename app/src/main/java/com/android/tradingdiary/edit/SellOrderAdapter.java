@@ -12,6 +12,7 @@ import com.android.tradingdiary.R;
 import com.android.tradingdiary.data.SellOrder;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.mainscreen.ItemTouchHelperListener;
+import com.android.tradingdiary.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -45,9 +46,9 @@ public class SellOrderAdapter extends RecyclerView.Adapter<SellOrderAdapter.View
 
         private void bind(final SellOrder item_) {
             item = item_;
-            qty.setText("Quantity: " + item_.getSellQty());
-            price.setText("Price(Unit): " + item_.getSellPrice());
-            total.setText("" + (item_.getSellQty() * item_.getSellPrice()));
+            qty.setText("Quantity: " + Utils.formatDouble(item_.getSellQty()));
+            price.setText("Price(Unit): " + Utils.formatDouble(item_.getSellPrice()));
+            total.setText(Utils.formatDouble((item_.getSellQty() * item_.getSellPrice())));
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

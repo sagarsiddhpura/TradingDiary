@@ -72,8 +72,8 @@ public class Order {
         }
     }
 
-    private int getSoldQty() {
-        int soldQty = 0;
+    private double getSoldQty() {
+        double soldQty = 0.0;
         for (SellOrder sellOrder : getSellOrders()) {
             soldQty += sellOrder.sellQty;
         }
@@ -104,7 +104,7 @@ public class Order {
     }
 
     public boolean isComplete() {
-        return buyQty - getSoldQty() < 1;
+        return Math.abs(buyQty - getSoldQty()) <= 0.001;
     }
 
     public double getRemainingSaleTotal() {

@@ -229,7 +229,7 @@ public class EditOrderActivity extends AppCompatActivity {
     }
 
     private void setBuyTotal() {
-        buyTotal.setText(String.valueOf(getbuyTotal()));
+        buyTotal.setText(Utils.formatDouble(getbuyTotal()));
     }
 
     private double getbuyTotal() {
@@ -244,7 +244,7 @@ public class EditOrderActivity extends AppCompatActivity {
     }
 
     private void setSellTotal() {
-        estimatedSellTotal.setText(String.valueOf(getSellTotal()));
+        estimatedSellTotal.setText(Utils.formatDouble(getSellTotal()));
     }
 
     private double getSellTotal() {
@@ -273,18 +273,18 @@ public class EditOrderActivity extends AppCompatActivity {
     private void setProfitLossData() {
         double estimatedProfitLossValue = (getSellTotal()) - (getDouble(buyQty) * getDouble(buyPrice));
         if(estimatedProfitLossValue >= 0) {
-            estimatedProfitLoss.setText(String.valueOf(estimatedProfitLossValue));
+            estimatedProfitLoss.setText(Utils.formatDouble(estimatedProfitLossValue));
             estimatedProfitLossHint.setHint("Est. Profit");
         } else {
-            estimatedProfitLoss.setText(String.valueOf(estimatedProfitLossValue * -1));
+            estimatedProfitLoss.setText(Utils.formatDouble(estimatedProfitLossValue * -1));
             estimatedProfitLossHint.setHint("Est. Loss");
         }
         double actualProfitLossValue = order.getProfitLoss();
         if(actualProfitLossValue >= 0) {
-            actualProfitLoss.setText(String.valueOf(actualProfitLossValue));
+            actualProfitLoss.setText(Utils.formatDouble(actualProfitLossValue));
             actualProfitLossHint.setHint("Actual Profit");
         } else {
-            actualProfitLoss.setText(String.valueOf(actualProfitLossValue * -1));
+            actualProfitLoss.setText(Utils.formatDouble(actualProfitLossValue * -1));
             actualProfitLossHint.setHint("Actual Loss");
         }
     }
