@@ -123,9 +123,9 @@ public class EditOrderActivity extends AppCompatActivity {
                 final View dialogView = inflater.inflate(R.layout.dialog_add_sell_order, null);
 
                 final EditText sellPrice = dialogView.findViewById(R.id.sell_order_price_per_unit);
-                sellPrice.setText(String.valueOf(getSellPricePerUnit()));
+                sellPrice.setText(Utils.formatDouble(getSellPricePerUnit()));
                 final EditText sellQty = dialogView.findViewById(R.id.sell_order_quantity);
-                sellQty.setText(String.valueOf(order.getRemainingSellQty()));
+                sellQty.setText(Utils.formatDouble(order.getRemainingSellQty()));
 
                 alert.setView(dialogView);
                 alert.setPositiveButton("Ok", null);
