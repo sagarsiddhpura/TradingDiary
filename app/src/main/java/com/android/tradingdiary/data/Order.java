@@ -117,4 +117,9 @@ public class Order {
             return 0.0;
         }
     }
+
+    public boolean isMatchingSearch(String s) {
+        String searchString = name + ":::" + userId;
+        return searchString.toLowerCase().contains(s.toLowerCase());
+    }
 }

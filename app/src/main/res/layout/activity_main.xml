@@ -10,6 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:background="@color/white">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -46,6 +47,7 @@
 
             <com.google.android.material.chip.Chip
                     android:id="@+id/chip"
+                    app:closeIconEnabled="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Today"
@@ -55,6 +57,46 @@
                     android:visibility="gone"/>
 
         </com.google.android.material.chip.ChipGroup>
+
+        <LinearLayout
+                android:animateLayoutChanges="true"
+                android:id="@+id/search_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp"
+                android:visibility="gone">
+
+            <EditText
+                    android:hint="@string/search"
+                    android:padding="8dp"
+                    android:lines="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/search"
+                    android:layout_weight="1"/>
+
+            <com.google.android.material.chip.Chip
+                    android:id="@+id/search_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/teal_700"
+                    app:closeIconVisible="false"
+                    app:chipStartPadding="0dp"
+                    app:iconStartPadding="16dp"
+                    app:iconEndPadding="0dp"
+                    app:chipEndPadding="0dp"
+                    app:chipIconTint="@color/teal_700"
+                    app:chipIcon="@drawable/ic_close"
+                    app:closeIconStartPadding="0dp"
+                    app:closeIconEndPadding="0dp"
+                    app:chipBackgroundColor="@color/teal_50"/>
+
+
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 

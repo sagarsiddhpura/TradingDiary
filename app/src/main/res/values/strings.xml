@@ -26,4 +26,5 @@
     <string name="recently_completed">Recently Completed</string>
     <string name="recently_added">Recently Added</string>
     <string name="date">Date</string>
+    <string name="search">Search</string>
 </resources>

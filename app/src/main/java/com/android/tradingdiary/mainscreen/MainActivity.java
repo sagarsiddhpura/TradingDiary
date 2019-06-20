@@ -1,17 +1,19 @@
 package com.android.tradingdiary.mainscreen;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private Chip chip;
     private long filterTimeStart;
     private long filterTimeEnd;
+    private EditText search;
+    private LinearLayout searchParent;
+    private TextWatcher textWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,22 @@ public class MainActivity extends AppCompatActivity {
         setupList();
 
         chip = findViewById(R.id.chip);
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeFilter();
+            }
+        });
+        search = findViewById(R.id.search);
+        searchParent = findViewById(R.id.search_parent);
+        Chip searchClose = findViewById(R.id.search_close);
+        searchClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                closeSearch();
+            }
+        });
+
         FloatingActionButton fab = findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,8 +151,14 @@ public class MainActivity extends AppCompatActivity {
             } else if(filter.equals("Date")) {
                 ordersFiltered = new ArrayList<>();
                 for (Order order : orders) {
-                    long diff = order.creationDate - DateTimeUtils.getTodayStart();
                     if (order.creationDate > filterTimeStart && order.creationDate < filterTimeEnd) {
+                        ordersFiltered.add(order);
+                    }
+                }
+            } else if(filter.equals("Search") && !"".equals(search.getText().toString())) {
+                ordersFiltered = new ArrayList<>();
+                for (Order order : orders) {
+                    if (order.isMatchingSearch(search.getText().toString())) {
                         ordersFiltered.add(order);
                     }
                 }
@@ -169,13 +196,16 @@ public class MainActivity extends AppCompatActivity {
                 removeFilter();
                 break;
             case R.id.filter_today:
-                filterTodayOrders();
+                initFilter("Today", "Today");
                 break;
             case R.id.filter_date:
                 filterDateOrders();
                 break;
             case R.id.filter_recently_added:
-                filterRecentlyCompletedOrders();
+                initFilter("RecentlyAdded", "Recently Added");
+                break;
+            case R.id.action_search:
+                startSearch();
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -186,11 +216,32 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void filterRecentlyCompletedOrders() {
-        filter = "RecentlyAdded";
-        chip.setText("Recently Added");
+    private void initFilter(String action, String text) {
+        closeSearch();
+        filter = action;
+        chip.setText(text);
         chip.setVisibility(View.VISIBLE);
         refreshList(orders);
+    }
+
+    private void startSearch() {
+        removeFilter();
+        filter = "Search";
+        search.setText("");
+        searchParent.setVisibility(View.VISIBLE);
+        textWatcher = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                refreshList(orders);
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        };
+        search.addTextChangedListener(textWatcher);
     }
 
     private void filterDateOrders() {
@@ -204,13 +255,6 @@ public class MainActivity extends AppCompatActivity {
         filter = "";
         chip.setText("");
         chip.setVisibility(View.GONE);
-        refreshList(orders);
-    }
-
-    private void filterTodayOrders() {
-        filter = "Today";
-        chip.setText("Today");
-        chip.setVisibility(View.VISIBLE);
         refreshList(orders);
     }
 
@@ -238,13 +282,23 @@ public class MainActivity extends AppCompatActivity {
         dayEnd.set(Calendar.SECOND, 59);
         filterTimeEnd = dayEnd.getTimeInMillis();
 
-        filter = "Date";
-        chip.setText(DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.DATE));
-        chip.setVisibility(View.VISIBLE);
-        refreshList(orders);
-        Toast.makeText(getApplicationContext(),"filterTimeStart:" + DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.DATE)
-                + " " + DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.TIME) + ", filterTimeEnd:" +
-                DateTimeUtils.longToString(filterTimeEnd, DateTimeUtils.DATE)
-                + " " + DateTimeUtils.longToString(filterTimeEnd, DateTimeUtils.TIME) ,Toast.LENGTH_LONG).show();
+        initFilter("Date", DateTimeUtils.longToString(filterTimeStart, DateTimeUtils.DATE));
+    }
+
+    private void closeSearch() {
+        searchParent.setVisibility(View.GONE);
+        search.removeTextChangedListener(textWatcher);
+        removeFilter();
+        Utils.hideKeyBoard(MainActivity.this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!"".equals(filter)) {
+            closeSearch();
+            removeFilter();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
