@@ -26,5 +26,11 @@ change orderid style
 Maintain index on saving existing order
 add new order to first position
 
+Fixed completed orders delete all -> showing orders
+Fixed buytotal on load
+Fixed you get in edit mode and delete it will not shown in history
+Fixed: Unit is not loaded on edit screen
+Fixed: Sell percentage is not loaded on edit screen
+Added unit on main screen
 
 https://github.com/savvisingh/DateRangePicker

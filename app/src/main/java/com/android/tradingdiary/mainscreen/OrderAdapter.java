@@ -59,7 +59,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                     mSub.setText("Loss: " +  (item_.getProfitLoss() * -1) + " Rs.");
                 }
             } else {
-                mDesc.setText(item_.getRemainingSellQty() + "/" + item_.buyQty + " left");
+                mDesc.setText(item_.getRemainingSellQty() + "/" + item_.buyQty + " " + item_.unit +" left");
                 mSub.setText(item_.getRemainingSaleTotal() + " Rs. sale remaining");
             }
             mId.setText("Order ID: " + item_.userId + "\nCreated: " + DateTimeUtils.longToString(item_.creationDate, DateTimeUtils.DATE)

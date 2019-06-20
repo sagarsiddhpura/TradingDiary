@@ -123,7 +123,7 @@ public class CompletedOrdersActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int itemId) {
                 Utils.deleteAllCompletedOrders();
                 Toast.makeText(getApplicationContext(),"All Orders deleted...",Toast.LENGTH_LONG).show();
-                orders = Utils.getOrders();
+                orders = Utils.getCompletedOrders();
                 refreshList(orders);
             }
         });

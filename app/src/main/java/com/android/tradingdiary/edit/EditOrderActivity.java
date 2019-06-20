@@ -261,10 +261,13 @@ public class EditOrderActivity extends AppCompatActivity {
     private void loadOrder(final Order order) {
         name.setText(order.name);
         buyQty.setText(String.valueOf(order.buyQty));
+        buyUnit.setText(String.valueOf(order.unit));
         buyPrice.setText(String.valueOf(order.buyPricePerUnit));
+        estimatedSellPercentage.setText(String.valueOf(order.sellPercentage));
         estimatedSellPricePerUnit.setText(String.valueOf(order.sellPricePerUnit));
         estimatedSellTotal.setText(String.valueOf(order.buyQty * order.sellPricePerUnit));
         setProfitLossData();
+        setBuyTotal();
     }
 
     private void setProfitLossData() {
@@ -401,6 +404,7 @@ public class EditOrderActivity extends AppCompatActivity {
                 .setTitle("Delete Order");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int itemId) {
+                Utils.saveCompletedOrder(order);
                 Utils.deleteOrder(order.id);
                 Toast.makeText(getApplicationContext(),"Order deleted...",Toast.LENGTH_LONG).show();
                 finish();
