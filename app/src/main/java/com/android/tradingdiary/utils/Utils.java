@@ -61,16 +61,22 @@ public class Utils {
     public static void saveOrder(Order order) {
         ArrayList<Order> orders = getOrders();
         int index = 0;
+        boolean isFound = false;
         Iterator<Order> iterator = orders.iterator();
         while(iterator.hasNext()) {
             Order currentOrder = iterator.next();
             index++;
             if(currentOrder.id.equals(order.id)) {
                iterator.remove();
+                isFound = true;
                break;
             }
         }
-        orders.add(index, order);
+        if(isFound) {
+            orders.add(index - 1, order);
+        } else {
+            orders.add(0, order);
+        }
         saveOrders(orders);
     }
 
