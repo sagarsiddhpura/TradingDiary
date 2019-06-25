@@ -123,7 +123,7 @@ public class Order {
     }
 
     public boolean isMatchingSearch(String s) {
-        String searchString = name + ":::" + userId;
+        String searchString = name + ":::" + userId + ":::" + remarks;
         return searchString.toLowerCase().contains(s.toLowerCase());
     }
 }

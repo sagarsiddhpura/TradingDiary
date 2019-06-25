@@ -1,11 +1,14 @@
 package com.android.tradingdiary.mainscreen;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.tradingdiary.BuildConfig;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.completedorders.CompletedOrdersActivity;
+import com.android.tradingdiary.data.Backup;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.edit.EditOrderActivity;
 import com.android.tradingdiary.utils.DateTimeUtils;
@@ -30,6 +34,8 @@ import com.android.tradingdiary.utils.NotificationUtils;
 import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.*;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Trading Diary");
         Utils.setupSystemUI(this);
-        NotificationUtils.buildRepeatedReminder(getApplication(), 1, "Check Trading diary", "");
+        NotificationUtils.buildRepeatedReminder(getApplication(), System.currentTimeMillis(), "Check Trading diary", "");
 
         setupList();
 
@@ -214,6 +220,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_delete_all_orders:
                 deleteAllOrders();
                 break;
+            case R.id.action_online_backup:
+                createOnlineBackup();
+                break;
+            case R.id.action_online_restore:
+                restoreFromOnlineBackup();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -221,6 +233,92 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void restoreFromOnlineBackup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Are you sure you want to restore data from online backup? All current data will be deleted.")
+                .setTitle("Restore online backup");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int itemId) {
+                AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+                Account[] list = manager.getAccounts();
+
+                if(list == null || list.length < 1 || list[0] == null || list[0].name == null) {
+                    Toast.makeText(getApplicationContext(),"Error getting Google account for backup. Please login into Google Play Store and then try backup",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String email = list[0].name;
+                email = email.replaceAll("\\.", "");
+                email = email.replaceAll("#", "");
+                email = email.replaceAll("\\$", "");
+                email = email.replaceAll("\\[", "");
+                email = email.replaceAll("\\]", "");
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("backups/" + email);
+                // Read from the database
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        String json = dataSnapshot.getValue(String.class);
+                        Gson gson = new Gson();
+                        Backup backup = gson.fromJson(json, Backup.class);
+                        Utils.saveOrders(backup.orders);
+                        Utils.saveCompletedOrders(backup.completedOrders);
+                        Toast.makeText(getApplicationContext(),"Backup successfully restored",Toast.LENGTH_LONG).show();
+                        refreshList(backup.orders);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Toast.makeText(getApplicationContext(),"Failed to read backup",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("CANCEL",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void createOnlineBackup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Are you sure you want to Create online backup?")
+                .setTitle("Online Backup");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int itemId) {
+                AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+                Account[] list = manager.getAccounts();
+
+                if(list == null || list.length < 1 || list[0] == null || list[0].name == null) {
+                    Toast.makeText(getApplicationContext(),"Error getting Google account for backup. Please login into Google Play Store and then try backup",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String email = list[0].name;
+                email = email.replaceAll("\\.", "");
+                email = email.replaceAll("#", "");
+                email = email.replaceAll("\\$", "");
+                email = email.replaceAll("\\[", "");
+                email = email.replaceAll("\\]", "");
+                // Write a message to the database
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("backups/" + email);
+                ArrayList<Order> orders = Utils.getOrders();
+                ArrayList<Order> completedOrders = Utils.getCompletedOrders();
+                Backup backup = new Backup(orders, completedOrders);
+                Gson gson = new Gson();
+                String backupJson = gson.toJson(backup);
+
+                myRef.setValue(backupJson);
+                Toast.makeText(getApplicationContext(),"Data backed up at " + list[0].name, Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setNegativeButton("CANCEL",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void deleteAllOrders() {

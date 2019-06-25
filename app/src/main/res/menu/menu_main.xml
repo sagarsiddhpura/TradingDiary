@@ -47,4 +47,19 @@
         app:showAsAction="ifRoom"
         android:visible="true"/>
 
+    <item
+        android:id="@+id/action_online_backup"
+        android:name="@string/online_backup"
+        android:icon="@drawable/ic_online_backup"
+        android:title="@string/online_backup"
+        app:showAsAction="ifRoom"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/action_online_restore"
+        android:name="@string/online_restore"
+        android:icon="@drawable/ic_online_restore"
+        android:title="@string/online_restore"
+        app:showAsAction="ifRoom"
+        android:visible="true"/>
 </menu>

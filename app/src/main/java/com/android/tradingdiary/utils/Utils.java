@@ -41,7 +41,7 @@ public class Utils {
         return orders;
     }
 
-    private static void saveOrders(ArrayList<Order> orders) {
+    public static void saveOrders(ArrayList<Order> orders) {
         Paper.book().write("orders", orders);
     }
 
@@ -54,7 +54,7 @@ public class Utils {
         return orders;
     }
 
-    private static void saveCompletedOrders(ArrayList<Order> completedOrders) {
+    public static void saveCompletedOrders(ArrayList<Order> completedOrders) {
         Paper.book().write("completed_orders", completedOrders);
     }
 
