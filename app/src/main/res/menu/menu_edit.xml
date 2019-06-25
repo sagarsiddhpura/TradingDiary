@@ -25,4 +25,13 @@
         android:title="@string/change_color"
         app:showAsAction="ifRoom"
         android:visible="true"/>
+
+    <item
+        android:id="@+id/action_restore_order"
+        android:name="@string/restore_order"
+        android:icon="@drawable/ic_restore"
+        android:title="@string/restore_order"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
+
 </menu>

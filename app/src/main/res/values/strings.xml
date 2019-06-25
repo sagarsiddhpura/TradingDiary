@@ -29,4 +29,5 @@
     <string name="search">Search</string>
     <string name="delete_all_orders">Delete All Orders</string>
     <string name="change_color">Change Color</string>
+    <string name="restore_order">Restore Order</string>
 </resources>

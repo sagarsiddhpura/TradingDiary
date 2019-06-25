@@ -204,6 +204,7 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_edit, menu);
         menu.findItem(R.id.action_change_color).setVisible(false);
+        menu.findItem(R.id.action_restore_order).setVisible(true);
         return true;
     }
 
@@ -216,6 +217,9 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
             case R.id.action_done:
                 finish();
                 break;
+            case R.id.action_restore_order:
+                restoreOrder();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -223,6 +227,23 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void restoreOrder() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditCompletedOrderActivity.this);
+        builder.setMessage("Are you sure you want to Restore this Order?")
+                .setTitle("Restore Order");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int itemId) {
+                Utils.saveOrder(order);
+                Utils.deleteCompletedOrder(order.id);
+                Toast.makeText(getApplicationContext(),"Order restored...",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+        builder.setNegativeButton("CANCEL",null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void deleteOrder() {
