@@ -2,6 +2,7 @@ package com.android.tradingdiary.edit;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.*;
@@ -25,8 +26,10 @@ import com.android.tradingdiary.mainscreen.ItemTouchHelperCallback;
 import com.android.tradingdiary.mainscreen.MainActivity;
 import com.android.tradingdiary.utils.DateTimeUtils;
 import com.android.tradingdiary.utils.Utils;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import petrov.kristiyan.colorpicker.ColorPicker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,12 +53,14 @@ public class EditOrderActivity extends AppCompatActivity {
     private EditText estimatedSellPercentage;
     private EditText buyTotal;
     private EditText buyUnit;
+    private CollapsingToolbarLayout appbar;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_order);
-        Toolbar toolbar = findViewById(R.id.edit_toolbar);
+        toolbar = findViewById(R.id.edit_toolbar);
         setSupportActionBar(toolbar);
         Utils.setupActionBar(this, false, R.color.teal_700, R.color.teal_700, R.string.edit, toolbar);
 
@@ -63,6 +68,7 @@ public class EditOrderActivity extends AppCompatActivity {
         final String orderId = intent.getStringExtra("ORDER_ID");
         boolean isNew = intent.getBooleanExtra("IS_NEW", false);
 
+        appbar = findViewById(R.id.appbar);
         name = findViewById(R.id.title_edit);
         buyQty = findViewById(R.id.buy_qty);
         buyPrice = findViewById(R.id.buy_price_per_unit);
@@ -268,6 +274,12 @@ public class EditOrderActivity extends AppCompatActivity {
         estimatedSellTotal.setText(String.valueOf(order.buyQty * order.sellPricePerUnit));
         setProfitLossData();
         setBuyTotal();
+        // restore color
+        int color = order.color;
+        appbar.setBackgroundColor(getResources().getColor(color));
+        appbar.setContentScrimColor(getResources().getColor(color));
+        appbar.setStatusBarScrimColor(getResources().getColor(color));
+        Utils.setupActionBar(EditOrderActivity.this, false, color, color, R.string.edit, toolbar);
     }
 
     private void setProfitLossData() {
@@ -389,6 +401,9 @@ public class EditOrderActivity extends AppCompatActivity {
             case R.id.action_done:
                 validateAndSaveEntity();
                 break;
+            case R.id.action_change_color:
+                changeColor();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -396,6 +411,50 @@ public class EditOrderActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void changeColor() {
+        final ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(R.color.color1);
+        colors.add(R.color.color2);
+        colors.add(R.color.color3);
+        colors.add(R.color.color4);
+        colors.add(R.color.color5);
+        colors.add(R.color.color6);
+        colors.add(R.color.color7);
+        colors.add(R.color.color8);
+        colors.add(R.color.color9);
+        colors.add(R.color.color10);
+        colors.add(R.color.color11);
+        colors.add(R.color.color12);
+        colors.add(R.color.color13);
+        colors.add(R.color.color14);
+        colors.add(R.color.color15);
+
+        ArrayList<Integer> colorsResolved = new ArrayList<>();
+        for (Integer color : colors) {
+            colorsResolved.add(getResources().getColor(color));
+        }
+        ColorPicker colorPicker = new ColorPicker(this);
+        colorPicker.setRoundColorButton(true);
+        colorPicker.setColors(colorsResolved.get(0), colorsResolved.get(1), colorsResolved.get(2), colorsResolved.get(3), colorsResolved.get(4),
+                colorsResolved.get(5), colorsResolved.get(6), colorsResolved.get(7), colorsResolved.get(8), colorsResolved.get(9), colorsResolved.get(10),
+                colorsResolved.get(11), colorsResolved.get(12), colorsResolved.get(13), colorsResolved.get(14));
+        colorPicker.show();
+        colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+            @Override
+            public void onChooseColor(int position,int color) {
+                Integer colorSelected = colors.get(position);
+                order.color = colorSelected;
+                appbar.setBackgroundColor(getResources().getColor(colorSelected));
+                appbar.setContentScrimColor(getResources().getColor(colorSelected));
+                appbar.setStatusBarScrimColor(getResources().getColor(colorSelected));
+                Utils.setupActionBar(EditOrderActivity.this, false, colorSelected, colorSelected, R.string.edit, toolbar);
+            }
+
+            @Override
+            public void onCancel(){}
+        });
     }
 
     private void deleteOrder() {

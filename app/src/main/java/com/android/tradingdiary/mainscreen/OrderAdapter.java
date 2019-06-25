@@ -75,7 +75,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             if(item_.isComplete()) {
                 mCard.setCardBackgroundColor(context.getResources().getColor(R.color.black_negative));
             } else {
-                mCard.setCardBackgroundColor(context.getResources().getColor(R.color.teal_700));
+                mCard.setCardBackgroundColor(context.getResources().getColor(item_.color));
             }
         }
     }

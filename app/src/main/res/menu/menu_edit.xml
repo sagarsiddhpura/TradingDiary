@@ -18,4 +18,11 @@
         app:showAsAction="always"
         android:visible="true"/>
 
+    <item
+        android:id="@+id/action_change_color"
+        android:name="@string/change_color"
+        android:icon="@drawable/ic_color"
+        android:title="@string/change_color"
+        app:showAsAction="ifRoom"
+        android:visible="true"/>
 </menu>

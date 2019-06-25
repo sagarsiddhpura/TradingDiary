@@ -38,3 +38,4 @@ Updated decimals to two places
 
 
 https://github.com/savvisingh/DateRangePicker
+https://github.com/kristiyanP/colorpicker

@@ -1,5 +1,6 @@
 package com.android.tradingdiary.data;
 
+import com.android.tradingdiary.R;
 import com.android.tradingdiary.utils.Utils;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Order {
     public String userId;
     public String unit;
     public double sellPercentage;
+    public int color;
 
     public Order(String id, String name) {
         this.id = id;
@@ -27,6 +29,7 @@ public class Order {
         this.creationDate = System.currentTimeMillis();
         this.unit = "";
         this.userId = Utils.formatId(id);
+        this.color = R.color.teal_700;
     }
 
     public Order() {
