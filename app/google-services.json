@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "641906276975",
+    "firebase_url": "https://tradingdiary-56023.firebaseio.com",
+    "project_id": "tradingdiary-56023",
+    "storage_bucket": "tradingdiary-56023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:641906276975:android:fae47e082b8e252c",
+        "android_client_info": {
+          "package_name": "com.android.tradingdiary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "641906276975-8ajncr9nq5rt3e31d8j01tpav6fhfnj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.tradingdiary",
+            "certificate_hash": "ac308129ce02bb41df30899cf7c8a6dc74bf9516"
+          }
+        },
+        {
+          "client_id": "641906276975-h6rr59mnlb06uosvltgff7t2q894k6fi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.tradingdiary",
+            "certificate_hash": "33c72d341e6811d596ef86892c62d1810fb6dc4a"
+          }
+        },
+        {
+          "client_id": "641906276975-rpg20963gluflq8t341274oq66r3jcpk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnagUZxg2vCqtrdxFICyr1QGrQxe__pNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "641906276975-rfv18saqpfdi7vi17rvp5ck1vdgogfm4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

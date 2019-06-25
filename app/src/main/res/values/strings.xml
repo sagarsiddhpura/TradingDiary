@@ -32,6 +32,7 @@
     <string name="restore_order">Restore Order</string>
     <string name="online_backup">Online Backup</string>
     <string name="online_restore">Online Restore</string>
+    <string name="event_notification">Event Notification</string>
 
     <plurals name="remind_unit_minute">
         <item quantity="one">in %1$d minute</item>

@@ -1,9 +1,6 @@
 package com.android.tradingdiary.utils;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.app.*;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +10,11 @@ import androidx.core.app.NotificationCompat;
 import com.android.tradingdiary.R;
 import com.android.tradingdiary.mainscreen.MainActivity;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 public class NotificationUtils {
 
-    private static final long DEF_DAILY_REMIND_TIME = (16 * DateTimeUtils.HOUR) + (30 * DateTimeUtils.MINUTE);
+    private static final long DEF_DAILY_REMIND_TIME = (11 * DateTimeUtils.HOUR);
 
     public static final String EXTRA_IS_REPEATED = "IS_REPEATED";
 
@@ -29,10 +28,18 @@ public class NotificationUtils {
 
     public static final String EXTRA_NOTIFICATION_CONTENT = "NOTIFICATION_CONTENT";
 
+    public static final String EVENT_NOTIFICATION_ID = "EVENT_NOTIFICATION";
+
     public static void buildRepeatedReminder(Context context, long date, String title, String id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(EVENT_NOTIFICATION_ID, context.getString(R.string.event_notification), NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(channel);
+        }
+
         long showDate;
-        if (System.currentTimeMillis() >= DateTimeUtils.getTodayStart() + DateTimeUtils.HOUR * 9) {
-            showDate = DateTimeUtils.getTodayStart() + DateTimeUtils.DAY + DateTimeUtils.HOUR * 9;
+        if (System.currentTimeMillis() >= DateTimeUtils.getTodayStart() + DEF_DAILY_REMIND_TIME) {
+            showDate = DateTimeUtils.getTodayStart() + DateTimeUtils.DAY + DEF_DAILY_REMIND_TIME;
         } else {
             long dailyRemindTime = DEF_DAILY_REMIND_TIME;
             showDate = DateTimeUtils.getTodayStart() + dailyRemindTime;
@@ -41,27 +48,14 @@ public class NotificationUtils {
         createAlarmManager(context, date, title, id, showDate, dateUnit, true);
     }
 
-    public static void cancelReminder(Context context, String id) {
-        ComponentName componentName = new ComponentName(context, "com.gwokhou.deadline.ReminderReceiver");
-        Intent intent = new Intent();
-        intent.setData(Uri.parse(id));
-        intent.setComponent(componentName);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
-        if (pendingIntent != null) {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.cancel(pendingIntent);
-        }
-    }
-
     private static void createAlarmManager(Context context, long date, String title, String id, long showDate, String dateUnit, boolean isRepeated) {
-        ComponentName componentName = new ComponentName(context, "com.gwokhou.deadline.ReminderReceiver");
+        ComponentName componentName = new ComponentName(context, "com.android.tradingdiary.ReminderReceiver");
         Intent intent = new Intent();
         intent.setData(Uri.parse(id));
         intent.setComponent(componentName);
         intent.putExtra(EXTRA_IS_REPEATED, isRepeated);
-        intent.putExtra(EXTRA_NOTIFICATION_TITLE, "Check your orders");
-        intent.putExtra(EXTRA_NOTIFICATION_CONTENT, "Check your orders");
+        intent.putExtra(EXTRA_NOTIFICATION_TITLE, "Trade of the day");
+        intent.putExtra(EXTRA_NOTIFICATION_CONTENT, "Make a smart deal");
 
         if (isRepeated) {
             intent.putExtra(EXTRA_EVENT_TITLE, title);
@@ -83,7 +77,7 @@ public class NotificationUtils {
     public static void showNotification(Context context, String title, String content) {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         Notification notification = new NotificationCompat.Builder(context, MainActivity.EVENT_NOTIFICATION_ID)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -96,5 +90,4 @@ public class NotificationUtils {
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         manager.notify(1, notification);
     }
-
 }

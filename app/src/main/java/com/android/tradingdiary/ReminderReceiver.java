@@ -11,7 +11,6 @@ public class ReminderReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         boolean isRepeated = intent.getBooleanExtra(NotificationUtils.EXTRA_IS_REPEATED, false);
 
-
         String notificationTitle = intent.getStringExtra(NotificationUtils.EXTRA_NOTIFICATION_TITLE);
         String content = intent.getStringExtra(NotificationUtils.EXTRA_NOTIFICATION_CONTENT);
 

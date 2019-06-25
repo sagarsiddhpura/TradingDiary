@@ -44,4 +44,5 @@ dependencies {
     implementation 'io.paperdb:paperdb:2.6'
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 }
