@@ -26,6 +26,7 @@ import com.android.tradingdiary.completedorders.CompletedOrdersActivity;
 import com.android.tradingdiary.data.Order;
 import com.android.tradingdiary.edit.EditOrderActivity;
 import com.android.tradingdiary.utils.DateTimeUtils;
+import com.android.tradingdiary.utils.NotificationUtils;
 import com.android.tradingdiary.utils.Utils;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,6 +36,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EVENT_NOTIFICATION_ID = "EVENT_NOTIFICATION";
     private OrderAdapter adapter;
     private ArrayList<Order> orders;
     private String filter = "";
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Trading Diary");
         Utils.setupSystemUI(this);
+        NotificationUtils.buildRepeatedReminder(getApplication(), 1, "Check Trading diary", "");
 
         setupList();
 

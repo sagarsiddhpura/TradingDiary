@@ -200,6 +200,22 @@ public class DateTimeUtils {
         } else {
             return calendar.getDisplayName(field, Calendar.SHORT, Locale.getDefault());
         }
-
     }
+
+    public static String convertTimeUnit(Context context, long interval) {
+        if (interval >= DAY) {
+            int unit = (int) TimeUnit.DAYS.convert(interval, TimeUnit.MILLISECONDS);
+            return context.getResources().getQuantityString(R.plurals.remind_unit_day, unit, unit);
+        } else if (interval >= HOUR) {
+            int unit = (int) TimeUnit.HOURS.convert(interval, TimeUnit.MILLISECONDS);
+            return context.getResources().getQuantityString(R.plurals.remind_unit_hour, unit, unit);
+        } else if (interval >= MINUTE) {
+            int unit = (int) TimeUnit.MINUTES.convert(interval, TimeUnit.MILLISECONDS);
+            return context.getResources().getQuantityString(R.plurals.remind_unit_minute, unit, unit);
+        } else {
+            int unit = (int) TimeUnit.SECONDS.convert(interval, TimeUnit.MILLISECONDS);
+            return context.getResources().getQuantityString(R.plurals.remind_unit_second, unit, unit);
+        }
+    }
+
 }
