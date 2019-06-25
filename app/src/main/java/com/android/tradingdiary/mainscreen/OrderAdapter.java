@@ -33,6 +33,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
         private final TextView mId;
         private final ImageView delete;
+        private final TextView remarks;
         private TextView mSub;
         private Order item;
         private TextView mTitle;
@@ -48,6 +49,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             mSub = itemView.findViewById(R.id.event_subtitle);
             mId = itemView.findViewById(R.id.event_id);
             delete = itemView.findViewById(R.id.delete);
+            remarks = itemView.findViewById(R.id.event_remarks);
         }
 
         private void bind(final Order item_) {
@@ -76,6 +78,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 mCard.setCardBackgroundColor(context.getResources().getColor(R.color.black_negative));
             } else {
                 mCard.setCardBackgroundColor(context.getResources().getColor(item_.color));
+            }
+            if(item_.remarks != null && !item_.remarks.equals("")) {
+                remarks.setVisibility(View.VISIBLE);
+                remarks.setText(item_.remarks);
+            } else {
+                remarks.setVisibility(View.GONE);
             }
         }
     }

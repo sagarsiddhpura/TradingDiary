@@ -53,6 +53,7 @@ public class EditOrderActivity extends AppCompatActivity {
     private EditText estimatedSellPercentage;
     private EditText buyTotal;
     private EditText buyUnit;
+    private EditText remarks;
     private CollapsingToolbarLayout appbar;
     private Toolbar toolbar;
 
@@ -82,6 +83,7 @@ public class EditOrderActivity extends AppCompatActivity {
         actualSaleTotal = findViewById(R.id.actual_total_selling_price);
         actualProfitLoss = findViewById(R.id.actual_profit_loss);
         actualProfitLossHint = findViewById(R.id.actual_profit_loss_hint);
+        remarks = findViewById(R.id.remarks_edit);
 
         if(isNew) {
             if(BuildConfig.DEBUG) {
@@ -272,8 +274,10 @@ public class EditOrderActivity extends AppCompatActivity {
         estimatedSellPercentage.setText(String.valueOf(order.sellPercentage));
         estimatedSellPricePerUnit.setText(String.valueOf(order.sellPricePerUnit));
         estimatedSellTotal.setText(String.valueOf(order.buyQty * order.sellPricePerUnit));
+        remarks.setText(order.remarks);
         setProfitLossData();
         setBuyTotal();
+        setSellTotal();
         // restore color
         int color = order.color;
         appbar.setBackgroundColor(getResources().getColor(color));
@@ -374,6 +378,7 @@ public class EditOrderActivity extends AppCompatActivity {
         order.buyPricePerUnit = getDouble(buyPrice);
         order.sellPricePerUnit = getDouble(estimatedSellPricePerUnit);
         order.sellPercentage = getDouble(estimatedSellPercentage);
+        order.remarks = remarks.getText().toString();
 
         Utils.saveOrder(order);
         Toast.makeText(getApplicationContext(),"Order saved...", Toast.LENGTH_LONG).show();

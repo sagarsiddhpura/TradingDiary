@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.android.tradingdiary.edit.EditOrderActivity;
 import com.android.tradingdiary.edit.SellOrderAdapter;
 import com.android.tradingdiary.mainscreen.ItemActionListener;
 import com.android.tradingdiary.utils.Utils;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -40,30 +42,43 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
     private TextInputLayout estimatedProfitLossHint;
     private TextInputLayout actualProfitLossHint;
     private EditText actualProfitLoss;
+    private EditText estimatedSellTotal;
+    private EditText remarks;
+    private CollapsingToolbarLayout appbar;
+    private EditText buyTotal;
+    private EditText buyUnit;
+    private EditText estimatedSellPercentage;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_order);
-        Toolbar toolbar = findViewById(R.id.edit_toolbar);
+        toolbar = findViewById(R.id.edit_toolbar);
         setSupportActionBar(toolbar);
         Utils.setupActionBar(this, false, R.color.teal_700, R.color.teal_700, R.string.edit, toolbar);
 
         Intent intent = getIntent();
         final String orderId = intent.getStringExtra("ORDER_ID");
 
+        appbar = findViewById(R.id.appbar);
         name = findViewById(R.id.title_edit);
         buyQty = findViewById(R.id.buy_qty);
         buyPrice = findViewById(R.id.buy_price_per_unit);
+        buyUnit = findViewById(R.id.buy_unit);
         sellingPricePerUnit = findViewById(R.id.estimated_sell_price_per_unit);
         sellingPriceTotal = findViewById(R.id.estimated_total_selling_price);
         estimatedProfitLoss = findViewById(R.id.estimated_profit_loss);
         estimatedProfitLossHint = findViewById(R.id.profit_loss_hint);
+        estimatedSellPercentage = findViewById(R.id.estimated_sell_percentage);
         EditText actualSaleTotal = findViewById(R.id.actual_total_selling_price);
         actualProfitLoss = findViewById(R.id.actual_profit_loss);
         actualProfitLossHint = findViewById(R.id.actual_profit_loss_hint);
         EditText buyUnit = findViewById(R.id.buy_unit);
         EditText estimatedSellPercentage = findViewById(R.id.estimated_sell_percentage);
+        remarks = findViewById(R.id.remarks_edit);
+        buyTotal = findViewById(R.id.buy_total);
+        estimatedSellTotal = findViewById(R.id.estimated_total_selling_price);
 
         order = Utils.getCompletedOrder(orderId);
         loadOrder(order);
@@ -74,6 +89,7 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
         name.setEnabled(false);
         buyQty.setEnabled(false);
         buyPrice.setEnabled(false);
+        remarks.setEnabled(false);
         sellingPricePerUnit.setEnabled(false);
         actualSaleTotal.setText(String.valueOf(order.getActualSaleTotal()));
         buyUnit.setEnabled(false);
@@ -87,7 +103,41 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
         buyPrice.setText(String.valueOf(order.buyPricePerUnit));
         sellingPricePerUnit.setText(String.valueOf(order.sellPricePerUnit));
         sellingPriceTotal.setText(String.valueOf(order.buyQty * order.sellPricePerUnit));
+        estimatedSellPercentage.setText(String.valueOf(order.sellPercentage));
+        remarks.setText(order.remarks);
+        buyUnit.setText(String.valueOf(order.unit));
         setProfitLossData();
+        setBuyTotal();
+        setSellTotal();
+        // restore color
+        int color = order.color;
+        appbar.setBackgroundColor(getResources().getColor(color));
+        appbar.setContentScrimColor(getResources().getColor(color));
+        appbar.setStatusBarScrimColor(getResources().getColor(color));
+        Utils.setupActionBar(EditCompletedOrderActivity.this, false, color, color, R.string.edit, toolbar);
+    }
+
+    private void setSellTotal() {
+        estimatedSellTotal.setText(Utils.formatDouble(getSellTotal()));
+    }
+
+    private double getSellTotal() {
+        if(getDouble(sellingPricePerUnit) != 0.0) {
+            return getDouble(sellingPricePerUnit) * getDouble(buyQty);
+        } else if (getDouble(estimatedSellPercentage) != 0.0) {
+            double buyTotal = getDouble(buyQty) * getDouble(buyPrice);
+            return buyTotal + buyTotal * (getDouble(estimatedSellPercentage) / 100);
+        } else {
+            return 0.0;
+        }
+    }
+
+    private void setBuyTotal() {
+        buyTotal.setText(Utils.formatDouble(getbuyTotal()));
+    }
+
+    private double getbuyTotal() {
+        return getDouble(buyQty) * getDouble(buyPrice);
     }
 
     private void setProfitLossData() {
@@ -153,11 +203,7 @@ public class EditCompletedOrderActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_edit, menu);
-        Intent intent = getIntent();
-        boolean isNew = intent.getBooleanExtra("IS_NEW", false);
-        if(isNew) {
-            menu.findItem(R.id.action_del).setVisible(false);
-        }
+        menu.findItem(R.id.action_change_color).setVisible(false);
         return true;
     }
 

@@ -80,6 +80,17 @@
                         android:textSize="@dimen/font_small"
                         android:text="500.0 Rs. sale remaining"/>
 
+                <TextView
+                        android:id="@+id/event_remarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:textColor="@color/white_secondary"
+                        android:textSize="@dimen/font_small"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:text="Remark"/>
+
             </LinearLayout>
 
             <ImageView

@@ -17,6 +17,7 @@ public class Order {
     public String unit;
     public double sellPercentage;
     public int color;
+    public String remarks;
 
     public Order(String id, String name) {
         this.id = id;
