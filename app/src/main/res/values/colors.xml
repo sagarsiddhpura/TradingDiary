@@ -51,21 +51,20 @@
 
     <color name="transparent">#00FFFFFF</color>
 
+    <color name="color1">#d32f2f</color>
+    <color name="color2">#c2185b</color>
+    <color name="color3">#7b1fa2</color>
+    <color name="color4">#512da8</color>
+    <color name="color5">#303f9f</color>
+    <color name="color6">#1565c0</color>
+    <color name="color7">#0277bd</color>
+    <color name="color8">#00838f</color>
+    <color name="color10">@color/teal_700</color>
+    <color name="color11">#33691e</color>
+    <color name="color12">#827717</color>
+    <color name="color13">#3e2723</color>
+    <color name="color14">#263238</color>
+    <color name="color15">#212121</color>
     <color name="color16">#000000</color>
-    <color name="color1">#2062af</color>
-    <color name="color10">#000000</color>
-    <color name="color11">#51C1EE</color>
-    <color name="color12">@color/teal_700</color>
-    <color name="color13">#C2987D</color>
-    <color name="color14">#CE7777</color>
-    <color name="color15">#9086BA</color>
-    <color name="color2">#58AEB7</color>
-    <color name="color3">#F4B528</color>
-    <color name="color4">#DD3E48</color>
-    <color name="color5">#BF89AE</color>
-    <color name="color6">#5C88BE</color>
-    <color name="color7">#59BC10</color>
-    <color name="color8">#E87034</color>
-    <color name="color9">#f84c44</color>
 
 </resources>

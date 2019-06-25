@@ -423,13 +423,13 @@ public class EditOrderActivity extends AppCompatActivity {
         colors.add(R.color.color6);
         colors.add(R.color.color7);
         colors.add(R.color.color8);
-        colors.add(R.color.color9);
         colors.add(R.color.color10);
         colors.add(R.color.color11);
         colors.add(R.color.color12);
         colors.add(R.color.color13);
         colors.add(R.color.color14);
         colors.add(R.color.color15);
+        colors.add(R.color.color16);
 
         ArrayList<Integer> colorsResolved = new ArrayList<>();
         for (Integer color : colors) {
