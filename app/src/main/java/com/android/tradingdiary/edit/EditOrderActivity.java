@@ -9,6 +9,7 @@ import android.view.*;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,6 +57,7 @@ public class EditOrderActivity extends AppCompatActivity {
     private EditText remarks;
     private CollapsingToolbarLayout appbar;
     private Toolbar toolbar;
+    private LinearLayout content_root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class EditOrderActivity extends AppCompatActivity {
         actualProfitLoss = findViewById(R.id.actual_profit_loss);
         actualProfitLossHint = findViewById(R.id.actual_profit_loss_hint);
         remarks = findViewById(R.id.remarks_edit);
+        content_root = findViewById(R.id.content_root);
 
         if(isNew) {
             if(BuildConfig.DEBUG) {
@@ -283,6 +286,7 @@ public class EditOrderActivity extends AppCompatActivity {
         appbar.setBackgroundColor(getResources().getColor(color));
         appbar.setContentScrimColor(getResources().getColor(color));
         appbar.setStatusBarScrimColor(getResources().getColor(color));
+        content_root.setBackgroundColor(getResources().getColor(color));
         Utils.setupActionBar(EditOrderActivity.this, false, color, color, R.string.edit, toolbar);
     }
 
@@ -454,6 +458,7 @@ public class EditOrderActivity extends AppCompatActivity {
                 appbar.setBackgroundColor(getResources().getColor(colorSelected));
                 appbar.setContentScrimColor(getResources().getColor(colorSelected));
                 appbar.setStatusBarScrimColor(getResources().getColor(colorSelected));
+                content_root.setBackgroundColor(getResources().getColor(colorSelected));
                 Utils.setupActionBar(EditOrderActivity.this, false, colorSelected, colorSelected, R.string.edit, toolbar);
             }
 
