@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int itemId) {
                 AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
-                Account[] list = manager.getAccounts();
+                final Account[] list = manager.getAccounts();
 
                 if(list == null || list.length < 1 || list[0] == null || list[0].name == null) {
                     Toast.makeText(getApplicationContext(),"Error getting Google account for backup. Please login into Google Play Store and then try backup",Toast.LENGTH_LONG).show();
@@ -263,6 +263,11 @@ public class MainActivity extends AppCompatActivity {
                         // This method is called once with the initial value and again
                         // whenever data at this location is updated.
                         String json = dataSnapshot.getValue(String.class);
+                        if(json == null) {
+                            Toast.makeText(getApplicationContext(),"No backup found for account: " + list[0].name,Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
                         Gson gson = new Gson();
                         Backup backup = gson.fromJson(json, Backup.class);
                         Utils.saveOrders(backup.orders);

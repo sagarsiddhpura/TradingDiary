@@ -15,7 +15,7 @@ import com.android.tradingdiary.mainscreen.MainActivity;
 
 public class NotificationUtils {
 
-    private static final long DEF_DAILY_REMIND_TIME = (15 * DateTimeUtils.HOUR) + (55 * DateTimeUtils.MINUTE);
+    private static final long DEF_DAILY_REMIND_TIME = (16 * DateTimeUtils.HOUR) + (30 * DateTimeUtils.MINUTE);
 
     public static final String EXTRA_IS_REPEATED = "IS_REPEATED";
 
